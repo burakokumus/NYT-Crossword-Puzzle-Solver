@@ -1,19 +1,12 @@
 import sys
+from PuzzleGrid import PuzzleGrid 
 from PyQt5.QtCore import QDate, QSize, QTime, QTimer, Qt
 from PyQt5.QtGui import QIcon
 
-from PyQt5.QtWidgets import QApplication, QHBoxLayout, QLabel, QMainWindow, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QApplication, QDesktopWidget, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QMainWindow, QTextEdit, QVBoxLayout, QWidget
 
 GROUP_NAME = "PROMINI"
-
-# Default 5x5 crossword puzzle. 
-grid =[ 
-        [1, 0, 0, 0, 1], 
-        [0, 1, 0, 1, 0], 
-        [0, 0, 1, 0, 0], 
-        [0, 0, 1, 0, 0], 
-        [0, 0, 1, 0, 0], 
-    ] 
+APP_SIZE = (600, 700)
 
 class App(QMainWindow):
     def __init__(self):
@@ -22,7 +15,15 @@ class App(QMainWindow):
         self.setCentralWidget(self.central_widget)
         self.setWindowTitle("PROMINI NYT Mini CrossWord Solver")
         self.setWindowIcon(QIcon('nytimes.png')) 
-        self.setFixedSize(QSize(1280, 720))
+        self.setMinimumSize(QSize(*APP_SIZE))
+        self.setStyleSheet("background-color: white;") 
+        self.center()
+
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
 
 class MainWidget(QWidget):
     def __init__(self):
@@ -32,7 +33,6 @@ class MainWidget(QWidget):
         self.todays_date = now.toString(Qt.DefaultLocaleLongDate)
         time = QTime.currentTime()
         self.current_time = time.toString(Qt.DefaultLocaleLongDate)
-
         self.initUI()  
 
     def initUI(self):
@@ -40,43 +40,50 @@ class MainWidget(QWidget):
         self.header = QHBoxLayout()
         header_str = "The Mini Crossword " + self.todays_date + '\n' + "By Joel Fagliano" 
         header_label = QLabel(header_str)
+        header_label.setStyleSheet("border:1px solid rgb(0, 255, 0); ")
         self.header.addWidget(header_label)
 
         # Body (or middle part)
-        self.body = QHBoxLayout()
+        self.body = QGridLayout()
+        self.body.setSpacing(10)
+
+        tool_label = QLineEdit("Toolbar is here")
+
+        puzz_label = QTextEdit("Puzzle is here")
+        
+        self.body.addWidget(tool_label, 0, 0)
+        self.body.addWidget(PuzzleGrid(parent=self), 1, 0)
 
         # Footer
         self.footer = QHBoxLayout()
 
-        # creating a timer object 
+        # creating a timer object to update the time and date every second
         timer = QTimer(self) 
-  
-        # adding action to timer 
         timer.timeout.connect(self.show_time) 
-  
-        # update the timer every second 
         timer.start(1000) 
         
         footer_str = self.todays_date + '\n' + self.current_time + '\n' + GROUP_NAME
         self.footer_label = QLabel(footer_str)
+        self.footer_label.setStyleSheet("border:1px solid rgb(0, 255, 0); ")
 
         # Send footer label to the right
         self.footer.addStretch(1)
         self.footer.addWidget(self.footer_label)
 
-        vbox = QVBoxLayout()
+
+        main_layout = QGridLayout()
+
         # Add header on top
-        vbox.addLayout(self.header)
+        main_layout.addLayout(self.header, 0, 0, 1, 1)
 
         # Add body after header
-        vbox.addLayout(self.body)
+        main_layout.addLayout(self.body, 1, 0, 5, 1)
 
         # Send footer to the bottom
-        vbox.addStretch(1)
-        vbox.addLayout(self.footer)
+        main_layout.addLayout(self.footer, 6, 0, 1, 1)
 
 
-        self.setLayout(vbox)
+        self.setLayout(main_layout)
         self.show()
     
     def show_time(self):
@@ -87,13 +94,11 @@ class MainWidget(QWidget):
         footer_str = self.todays_date + '\n' + self.current_time + '\n' + GROUP_NAME
         self.footer_label.setText(footer_str)
 
+
 def main():
     app = QApplication(sys.argv)
     window = App()
     window.show()
-
-
-
     app.exec_()
     
 
