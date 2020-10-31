@@ -40,7 +40,7 @@ class ClueBar(QLabel):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.initUI()
-        self.setMaximumWidth(25 + CELL_SIZE * len(grid[0]))
+        self.setMaximumWidth(7 + CELL_SIZE * len(grid[0]))
 
     def initUI(self):
         self.setFont(QFont("Franklin", 10))
@@ -77,21 +77,21 @@ class ClueList(QScrollArea):
         self.initUI(clues)
         
     def initUI(self, clues):      
-        self.wi = QWidget()                 # Widget that contains the collection of Vertical Box
-        self.vbox = QVBoxLayout()               # The Vertical Box that contains the Horizontal Boxes of  labels and buttons
+        self.content = QWidget()
+        self.vbox = QVBoxLayout()      
 
         for clue in clues:
             object = QLabel(clue)          
             self.vbox.addWidget(object)
 
         self.vbox.addStretch(1)
-        self.wi.setLayout(self.vbox)
+        self.content.setLayout(self.vbox)
 
         #Scroll Area Properties
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setWidgetResizable(True)
-        self.setWidget(self.wi)
+        self.setWidget(self.content)
 
 class PuzzleGrid(QWidget):
     def __init__(self, parent=None):
@@ -100,7 +100,7 @@ class PuzzleGrid(QWidget):
 
     def initUI(self):
         vbox = QVBoxLayout()
-        self.setMinimumSize(50 + CELL_SIZE * len(grid[0]), 50 + CELL_SIZE * len(grid))
+        self.setMinimumSize(7 + CELL_SIZE * len(grid[0]), 7 + CELL_SIZE * len(grid))
         self.show()
 
     def paintEvent(self, e):
@@ -114,7 +114,7 @@ class PuzzleGrid(QWidget):
                     painter.setBrush(QBrush(Qt.black, Qt.SolidPattern))
                 else:
                     painter.setBrush(QBrush(Qt.white, Qt.SolidPattern))  
-                rect = QRect(14 + CELL_SIZE * j, 14 + CELL_SIZE * i, CELL_SIZE, CELL_SIZE)
+                rect = QRect(7 + CELL_SIZE * j, 7 + CELL_SIZE * i, CELL_SIZE, CELL_SIZE)
                 painter.translate(-5, -5)
                 painter.setPen(QPen(QColor(105,105,105), 1, Qt.SolidLine))
                 painter.drawRect(rect)
@@ -125,7 +125,7 @@ class PuzzleGrid(QWidget):
         painter.translate(-5, -5)
         painter.setPen(QPen(Qt.black, 3, Qt.SolidLine))
         painter.setBrush(QBrush(Qt.transparent))
-        painter.drawRect(13, 13, CELL_SIZE * len(grid[0]), CELL_SIZE * len(grid))
+        painter.drawRect(7, 7, CELL_SIZE * len(grid[0]), CELL_SIZE * len(grid))
 
 def main():
     app = QApplication(sys.argv)
