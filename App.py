@@ -1,12 +1,12 @@
 import sys
-from PuzzleGrid import PuzzleGrid 
+from Body import Body 
 from PyQt5.QtCore import QDate, QSize, QTime, QTimer, Qt
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QFont, QFontDatabase, QIcon
 
 from PyQt5.QtWidgets import QApplication, QDesktopWidget, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QMainWindow, QTextEdit, QVBoxLayout, QWidget
 
 GROUP_NAME = "PROMINI"
-APP_SIZE = (600, 700)
+APP_SIZE = (1000, 700)
 
 class App(QMainWindow):
     def __init__(self):
@@ -36,23 +36,22 @@ class MainWidget(QWidget):
         self.initUI()  
 
     def initUI(self):
+        QFontDatabase.addApplicationFont("Resources/KarnakPro-CondensedBlack.ttf")
+
         # Header
-        self.header = QHBoxLayout()
-        header_str = "The Mini Crossword " + self.todays_date + '\n' + "By Joel Fagliano" 
+        self.header = QVBoxLayout()
+        header_str = "The Mini Crossword"
         header_label = QLabel(header_str)
-        header_label.setStyleSheet("border:1px solid rgb(0, 255, 0); ")
+        header_label.setFont(QFont("KarnakPro-CondensedBlack", 30))
         self.header.addWidget(header_label)
+        joel_label = QLabel("By Joel Fagliano")
+        joel_label.setFont(QFont("Franklin", 10))
+        self.header.addWidget(joel_label)
 
         # Body (or middle part)
-        self.body = QGridLayout()
+        self.body = QHBoxLayout()
         self.body.setSpacing(10)
-
-        tool_label = QLineEdit("Toolbar is here")
-
-        puzz_label = QTextEdit("Puzzle is here")
-        
-        self.body.addWidget(tool_label, 0, 0)
-        self.body.addWidget(PuzzleGrid(parent=self), 1, 0)
+        self.body.addWidget(Body(parent=self))
 
         # Footer
         self.footer = QHBoxLayout()
@@ -64,7 +63,6 @@ class MainWidget(QWidget):
         
         footer_str = self.todays_date + '\n' + self.current_time + '\n' + GROUP_NAME
         self.footer_label = QLabel(footer_str)
-        self.footer_label.setStyleSheet("border:1px solid rgb(0, 255, 0); ")
 
         # Send footer label to the right
         self.footer.addStretch(1)
@@ -81,7 +79,6 @@ class MainWidget(QWidget):
 
         # Send footer to the bottom
         main_layout.addLayout(self.footer, 6, 0, 1, 1)
-
 
         self.setLayout(main_layout)
         self.show()
