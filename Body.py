@@ -5,38 +5,14 @@ from PyQt5.QtWidgets import QApplication, QHBoxLayout, QLabel, QPushButton, QScr
 
 CELL_SIZE = 95
 
-EMPTY_GRID = [  [' ', ' ', ' ', ' ', ' '],
-                [' ', ' ', ' ', ' ', ' '],
-                [' ', ' ', ' ', ' ', ' '],
-                [' ', ' ', ' ', ' ', ' '],
-                [' ', ' ', ' ', ' ', ' '] ]
-
-answer = [[' ', ' ', 'G', 'O', 'K'],
-          [' ', 'Y', 'U', 'C', 'E'],
-          ['B', 'U', 'R', 'A', 'K'],
-          ['O', 'C', 'U', ' ', 'K'],
-          [' ', ' ', 'P', 'O', 'O']]
-
-# Default 5x5 crossword puzzle. 
-grid = [[1, 1, 0, 0, 0], 
-        [1, 0, 0, 0, 0], 
-        [0, 0, 0, 0, 0], 
-        [0, 0, 0, 1, 0], 
-        [1, 1, 0, 0, 0]]
-
-question_numbers = [[1, 1, 1, 2, 3], 
-                    [1, 4, 0, 0, 0], 
-                    [5, 0, 0, 0, 0], 
-                    [6, 0, 0, 1, 0], 
-                    [1, 1, 7, 0, 0]]
-
 class Body(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, grid, answer, across, down, parent=None):
         super().__init__(parent)
-        self.puzzle_grid = PuzzleGrid(parent=self)
+        self.grid = grid
+        self.puzzle_grid = PuzzleGrid(grid, answer, parent=self)
         self.clue_bar = Toolbar(parent=self)
-        self.across_clues = ClueListWrapper("Across", [str(i) for i in range(3)], parent=self)
-        self.down_clues = ClueListWrapper("Down", [str(i) for i in range(50)], parent=self)
+        self.across_clues = ClueListWrapper("Across", across, parent=self)
+        self.down_clues = ClueListWrapper("Down", down, parent=self)
         self.initUI()
 
     def initUI(self):
@@ -54,17 +30,17 @@ class Toolbar(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.initUI()
-        self.setMaximumWidth(16 + CELL_SIZE * len(grid[0]))
+        self.setMaximumWidth(16 + CELL_SIZE * len(self.parent().grid[0]))
 
     def initUI(self):
         hbox = QHBoxLayout()
-        puzzle_grid = PuzzleGrid(self.parent().puzzle_grid)
+        puzzle_grid = self.parent().puzzle_grid
 
         clear_btn = QPushButton("Clear")
         clear_btn.clicked.connect(puzzle_grid.clear)
 
         reveal_btn = QPushButton("Reveal")
-        reveal_btn.clicked.connect(lambda: puzzle_grid.fill(answer))
+        reveal_btn.clicked.connect(puzzle_grid.fill)
 
         solve_btn = QPushButton("Solve")
         hbox.addSpacing(3)
@@ -108,7 +84,8 @@ class ClueList(QScrollArea):
         self.vbox = QVBoxLayout()      
 
         for clue in clues:
-            object = QLabel(clue)          
+            str1 = ''.join(clue)
+            object = QLabel(str1)          
             self.vbox.addWidget(object)
 
         self.vbox.addStretch(1)
@@ -121,29 +98,30 @@ class ClueList(QScrollArea):
         self.setWidget(self.content)
 
 class PuzzleGrid(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, grid, answers,  parent=None):
         super().__init__(parent)
         self.grid = grid
-        self.answer = EMPTY_GRID
+        self.current_fill = []
+        self.answers = answers
         self.initUI()
 
     def initUI(self):
         vbox = QVBoxLayout()
-        self.setMinimumSize(10 + CELL_SIZE * len(grid[0]), 10 + CELL_SIZE * len(grid))
+        self.setMinimumSize(10 + CELL_SIZE * len(self.grid[0]), 10 + CELL_SIZE * len(self.grid))
         self.show()
 
-    def fill(self, answers):
-        self.answer = answers
+    def fill(self):
+        self.current_fill = self.answers
         self.update()
 
     def clear(self):
-        self.answer = EMPTY_GRID
+        self.current_fill = [] 
         self.update()
 
     def paintEvent(self, e):
         painter = QPainter(self)
 
-        for i, row in enumerate(grid):
+        for i, row in enumerate(self.grid):
             for j, cell in enumerate(row):
                 # If cell is filled, set brush to black, white otherwise
                 if cell == 1:
@@ -167,26 +145,16 @@ class PuzzleGrid(QWidget):
                     painter.translate(-5, -5)
 
                 # Write the letter into the cell (if any) 
-                if self.answer[i][j] != ' ':
-                    painter.setPen(QPen(Qt.black, 2, Qt.SolidLine))
-                    font = QFont("Helvetica", 40)
-                    painter.setFont(font)
-                    painter.translate(0, 18)
-                    painter.drawText(rect, Qt.AlignCenter, self.answer[i][j])
-                    painter.translate(0, -18)
+                if len(self.current_fill) != 0:
+                    if self.current_fill[i][j] != ' ':
+                        painter.setPen(QPen(Qt.black, 2, Qt.SolidLine))
+                        font = QFont("Helvetica", 40)
+                        painter.setFont(font)
+                        painter.translate(0, 18)
+                        painter.drawText(rect, Qt.AlignCenter, self.current_fill[i][j])
+                        painter.translate(0, -18)
                 
         # Paint the outer rectangle
         painter.setPen(QPen(Qt.black, 3, Qt.SolidLine))
         painter.setBrush(QBrush(Qt.transparent))
         painter.drawRect(7, 7, CELL_SIZE * len(grid[0]), CELL_SIZE * len(grid))
-
-def main():
-    app = QApplication(sys.argv)
-    window = Body()
-    window.show()
-    app.exec_()
-    
-
-
-if __name__ == '__main__':
-    main()
