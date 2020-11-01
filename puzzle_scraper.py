@@ -76,12 +76,14 @@ class PuzzleScraper:
             except:
                 grid.append(' ')
                 continue
-            
-        for i in range(25):
-            print(grid[i], end=' ')
-            if i % 5 == 4:
-                print()
-        return
+        
+        result = []
+        for i in range(5):
+            row = []
+            for j in range(5):
+                row.append(grid[i * 5 + j])
+            result.append(row)
+        return result
     
     def close_driver(self):
         self.driver.quit()
