@@ -6,6 +6,7 @@ class PuzzleScraper:
     def __init__(self):
         self.driver = webdriver.Chrome("./chromedriver")
         self.driver.get("https://www.nytimes.com/crosswords/game/mini")
+        self.driver.maximize_window()
         print(self.driver.title)
 
     def click_button(self):
@@ -34,11 +35,17 @@ class PuzzleScraper:
         return result
     
     def get_clues(self):
-        result = []
+        across = []
+        down = []
         clues = self.driver.find_elements_by_class_name("Clue-li--1JoPu")
         for clue in clues:
-            result.append(clue.text[2:])
-        return result
+            p = clue.find_element_by_xpath("..//..")
+            parent_children = p.find_elements_by_css_selector("*")
+            if parent_children[0].text == "ACROSS":
+                across.append((clue.text[0], clue.text[2:]))
+            else:
+                down.append((clue.text[0], clue.text[2:]))
+        return across, down
 
     def reveal_puzzle(self):
         # not reliable
@@ -85,8 +92,12 @@ if __name__ == "__main__":
     grid = ps.get_grid()
     for row in grid:
         print(row)
-    clues = ps.get_clues()
-    for clue in clues:
+    across, down = ps.get_clues()
+    print("ACROSS")
+    for clue in across:
+        print(clue)
+    print("DOWN")
+    for clue in down:
         print(clue)
     ps.reveal_puzzle()
-    # ps.close_driver()
+    ps.close_driver()
