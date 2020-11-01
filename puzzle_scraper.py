@@ -7,7 +7,6 @@ class PuzzleScraper:
         self.driver = webdriver.Chrome("./chromedriver")
         self.driver.get("https://www.nytimes.com/crosswords/game/mini")
         self.driver.maximize_window()
-        print(self.driver.title)
 
     def click_button(self):
         clas = "buttons-modalButtonContainer--35RTh"
@@ -62,13 +61,14 @@ class PuzzleScraper:
             except:
                 numbers_grid.append(0)
                 continue
-            
+        
+        result = []
         for i in range(5):
             number_row = []
             for j in range(5):
                 number_row.append(numbers_grid[i * 5 + j])
-            numbers_grid.append(number_row)
-        return numbers_grid
+            result.append(number_row)
+        return result
 
 
 
