@@ -15,9 +15,9 @@ EMPTY_GRID = [  [' ', ' ', ' ', ' ', ' '],
                 [' ', ' ', ' ', ' ', ' '] ]
 
 class App(QMainWindow):
-    def __init__(self, grid=EMPTY_GRID, answer=EMPTY_GRID, across=[], down=[]):
+    def __init__(self, grid=EMPTY_GRID, grid_numbers=EMPTY_GRID, answer=EMPTY_GRID, across=[], down=[]):
         super().__init__()  
-        self.central_widget = MainWidget(grid, answer, across, down)
+        self.central_widget = MainWidget(grid, grid_numbers, answer, across, down)
         self.setCentralWidget(self.central_widget)
         self.setWindowTitle("PROMINI NYT Mini CrossWord Solver")
         self.setWindowIcon(QIcon('nytimes.png')) 
@@ -32,7 +32,7 @@ class App(QMainWindow):
         self.move(qr.topLeft())
 
 class MainWidget(QWidget):
-    def __init__(self, grid, answer, across, down):
+    def __init__(self, grid, grid_numbers, answer, across, down):
         super().__init__()  
         # Get today's date and time
         now = QDate.currentDate() 
@@ -40,6 +40,7 @@ class MainWidget(QWidget):
         time = QTime.currentTime()
         self.current_time = time.toString(Qt.DefaultLocaleLongDate)
         self.grid = grid
+        self.grid_numbers = grid_numbers
         self.answer = answer
         self.across = across
         self.down = down
@@ -61,7 +62,7 @@ class MainWidget(QWidget):
         # Body (or middle part)
         self.body = QHBoxLayout()
         self.body.setSpacing(10)
-        self.body.addWidget(Body(self.grid, self.answer, self.across, self.down, parent=self))
+        self.body.addWidget(Body(self.grid, self.grid_numbers, self.answer, self.across, self.down, parent=self))
 
         # Footer
         self.footer = QHBoxLayout()
@@ -108,10 +109,11 @@ def main():
     ps.click_button()
     grid = ps.get_grid()
     across, down = ps.get_clues()
+    grid_numbers = ps.get_grid_numbers()
     answer = ps.reveal_puzzle()
     ps.close_driver()
     app = QApplication(sys.argv)
-    window = App(grid, answer, across, down)
+    window = App(grid, grid_numbers, answer, across, down)
     window.show()
     app.exec_()
 

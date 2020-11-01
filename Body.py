@@ -6,10 +6,10 @@ from PyQt5.QtWidgets import QApplication, QHBoxLayout, QLabel, QPushButton, QScr
 CELL_SIZE = 95
 
 class Body(QWidget):
-    def __init__(self, grid, answer, across, down, parent=None):
+    def __init__(self, grid, grid_numbers, answer, across, down, parent=None):
         super().__init__(parent)
         self.grid = grid
-        self.puzzle_grid = PuzzleGrid(grid, answer, parent=self)
+        self.puzzle_grid = PuzzleGrid(grid, grid_numbers, answer, parent=self)
         self.clue_bar = Toolbar(parent=self)
         self.across_clues = ClueListWrapper("Across", across, parent=self)
         self.down_clues = ClueListWrapper("Down", down, parent=self)
@@ -98,9 +98,10 @@ class ClueList(QScrollArea):
         self.setWidget(self.content)
 
 class PuzzleGrid(QWidget):
-    def __init__(self, grid, answers,  parent=None):
+    def __init__(self, grid, grid_numbers, answers, parent=None):
         super().__init__(parent)
         self.grid = grid
+        self.grid_numbers = grid_numbers
         self.current_fill = []
         self.answers = answers
         self.initUI()
@@ -135,13 +136,13 @@ class PuzzleGrid(QWidget):
                 painter.drawRect(rect)
 
                 # Write the question number into the cell (if any) 
-                if question_numbers[i][j] != 0:
+                if self.grid_numbers[i][j] != 0:
                     # Move the painter by 5 pixels to write question numbers in a cell
                     painter.translate(5, 5)
                     painter.setPen(QPen(Qt.black, 2, Qt.SolidLine))
                     font = QFont("Helvetica", 15)
                     painter.setFont(font)
-                    painter.drawText(rect, Qt.AlignTop, str(question_numbers[i][j]))
+                    painter.drawText(rect, Qt.AlignTop, str(self.grid_numbers[i][j]))
                     painter.translate(-5, -5)
 
                 # Write the letter into the cell (if any) 
@@ -157,4 +158,4 @@ class PuzzleGrid(QWidget):
         # Paint the outer rectangle
         painter.setPen(QPen(Qt.black, 3, Qt.SolidLine))
         painter.setBrush(QBrush(Qt.transparent))
-        painter.drawRect(7, 7, CELL_SIZE * len(grid[0]), CELL_SIZE * len(grid))
+        painter.drawRect(7, 7, CELL_SIZE * len(self.grid[0]), CELL_SIZE * len(self.grid))
