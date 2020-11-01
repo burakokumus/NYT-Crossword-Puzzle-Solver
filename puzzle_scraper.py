@@ -47,6 +47,31 @@ class PuzzleScraper:
                 down.append((clue.text[0], clue.text[2:]))
         return across, down
 
+    def get_grid_numbers(self):
+        numbers_grid = []
+        for i in range(25):
+            cell_path = "//*[@id=\"cell-id-" + str(i) + "\"]"
+            c = self.driver.find_elements_by_xpath(cell_path)[0]
+            p = c.find_element_by_xpath("..")
+            children = p.find_elements_by_css_selector("*")
+            try:
+                if children[1].text.isnumeric():
+                    numbers_grid.append(children[1].text)
+                else:
+                    numbers_grid.append(0)
+            except:
+                numbers_grid.append(0)
+                continue
+            
+        for i in range(5):
+            number_row = []
+            for j in range(5):
+                number_row.append(numbers_grid[i * 5 + j])
+            numbers_grid.append(number_row)
+        return numbers_grid
+
+
+
     def reveal_puzzle(self):
         # not reliable
         # reveal_xpath = "/html/body/div[1]/div/div/div[4]/div/main/div[2]/div/div/ul/div[2]/li[2]/button"
@@ -87,19 +112,3 @@ class PuzzleScraper:
     
     def close_driver(self):
         self.driver.quit()
-
-if __name__ == "__main__":
-    ps = PuzzleScraper()
-    ps.click_button()
-    grid = ps.get_grid()
-    for row in grid:
-        print(row)
-    across, down = ps.get_clues()
-    print("ACROSS")
-    for clue in across:
-        print(clue)
-    print("DOWN")
-    for clue in down:
-        print(clue)
-    ps.reveal_puzzle()
-    ps.close_driver()
