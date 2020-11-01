@@ -6,7 +6,7 @@ from PyQt5.QtGui import QFont, QFontDatabase, QIcon
 from PyQt5.QtWidgets import QApplication, QDesktopWidget, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QMainWindow, QTextEdit, QVBoxLayout, QWidget
 
 GROUP_NAME = "PROMINI"
-APP_SIZE = (1000, 700)
+APP_SIZE = (1000, 800)
 
 class App(QMainWindow):
     def __init__(self):
@@ -63,6 +63,7 @@ class MainWidget(QWidget):
         
         footer_str = self.todays_date + '\n' + self.current_time + '\n' + GROUP_NAME
         self.footer_label = QLabel(footer_str)
+        self.footer_label.setFont(QFont("Franklin", 10))
 
         # Send footer label to the right
         self.footer.addStretch(1)
