@@ -41,15 +41,19 @@ class PuzzleScraper:
         return result
 
     def reveal_puzzle(self):
+        # not reliable
+        # reveal_xpath = "/html/body/div[1]/div/div/div[4]/div/main/div[2]/div/div/ul/div[2]/li[2]/button"
+        # self.driver.find_element_by_xpath(reveal_xpath).click() # 1
         
-        reveal_xpath = "/html/body/div[1]/div/div/div[4]/div/main/div[2]/div/div/ul/div[2]/li[2]/button"
-        
-        self.driver.find_element_by_xpath(reveal_xpath).click() # 1
+        toolbar = self.driver.find_element_by_class_name("Toolbar-expandedMenu--2s4M4")
+        toolbar_children = toolbar.find_elements_by_css_selector("*")
+        toolbar_children[11].click()
+
         puzzle_element = self.driver.find_element_by_link_text("Puzzle")
         puzzle_element.click() # 2
 
         self.driver.find_element_by_xpath("/html/body/div[1]/div/div[2]/div[2]/article/div[2]/button[2]/div").click() # worked!
-        self.driver.find_element_by_class_name("ModalBody-closeX--2Fmp7").click() # solution is shown after this
+        self.driver.find_element_by_class_name("ModalBody-closeX--2Fmp7").click() # solution is shown after this (X button)
         
         grid = []
         for i in range(25):
@@ -71,7 +75,7 @@ class PuzzleScraper:
             if i % 5 == 4:
                 print()
         return
-
+    
     def close_driver(self):
         self.driver.quit()
 
