@@ -1,12 +1,18 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.chrome.options import Options
 
 class PuzzleScraper:
     def __init__(self):
-        self.driver = webdriver.Chrome("./chromedriver")
+        self.option = webdriver.ChromeOptions()
+        self.option.add_argument('headless')
+        self.option.add_argument('--log-level=3')
+        self.driver = webdriver.Chrome("./chromedriver", options=self.option)
         self.driver.get("https://www.nytimes.com/crosswords/game/mini")
         self.driver.maximize_window()
+        self.driver.execute_script("window.scrollTo(0, 300)") 
 
     def click_button(self):
         clas = "buttons-modalButtonContainer--35RTh"
