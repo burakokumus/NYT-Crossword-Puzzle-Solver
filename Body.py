@@ -28,6 +28,7 @@ class ClueListWrapper(QWidget):
         self.initUI(title, clues)
 
     def initUI(self, title, clues):
+        self.setFixedHeight(self.parent().puzzle_grid.height() + 15)
         layout = QVBoxLayout()
         self.title = ClueListTitle(title, parent=self)
         self.list = ClueList(clues, parent=self)
@@ -89,6 +90,7 @@ class PuzzleGrid(QWidget):
 
     def initUI(self):
         self.setMinimumSize(10 + CELL_SIZE * len(self.grid[0]), 10 + CELL_SIZE * len(self.grid))
+        self.setMaximumHeight(10 + CELL_SIZE * len(self.grid))
         self.show()
 
     def paintEvent(self, e):
