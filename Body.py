@@ -38,11 +38,13 @@ class ClueListWrapper(QWidget):
 class ClueListTitle(QLabel):
     def __init__(self, title, parent=None):
         super().__init__(parent)
-        self.initUI(title)
+        self.title = title.upper()
+        self.initUI()
         
-    def initUI(self, title):
-        self.setFont(QFont("Franklin", 10))
-        self.setText(title)       
+    def initUI(self):
+        self.setFont(QFont("Helvetica"))
+        self.setStyleSheet("font-size:10pt; font-weight: 700;");
+        self.setText(self.title)       
         self.setAlignment(Qt.AlignLeft)
 
 class ClueList(QScrollArea):
@@ -55,9 +57,18 @@ class ClueList(QScrollArea):
         self.vbox = QVBoxLayout()      
 
         for clue in clues:
+            hbox = QHBoxLayout()
             str1 = ''.join(clue)
-            object = QLabel(str1)          
-            self.vbox.addWidget(object)
+            number_label = QLabel()
+            number_label.setText("<span style='font-size:10pt; font-weight:500;'>{}</span>".format(clue[0]))
+            number_label.setMaximumSize(15, 25)
+            clue_label = QLabel()   
+            clue_label.setText("<span style='font-size:10pt; font-weight:200;'>{}</span>".format(clue[1]))  
+            clue_label.setWordWrap(True)
+            hbox.addWidget(number_label, 0, Qt.AlignTop)
+            hbox.addWidget(clue_label)
+            self.vbox.addLayout(hbox)
+            self.vbox.addSpacing(5)
 
         self.vbox.addStretch(1)
         self.content.setLayout(self.vbox)
