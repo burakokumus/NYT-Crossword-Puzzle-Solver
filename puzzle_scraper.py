@@ -7,7 +7,6 @@ from selenium.webdriver.chrome.options import Options
 class PuzzleScraper:
     def __init__(self):
         self.option = webdriver.ChromeOptions()
-        self.option.add_argument('headless')
         self.option.add_argument('--log-level=3')
         self.driver = webdriver.Chrome("./chromedriver", options=self.option)
         self.driver.get("https://www.nytimes.com/crosswords/game/mini")
