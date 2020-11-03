@@ -4,6 +4,7 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 
+TRACE_MODE = True
 class PuzzleScraper:
     def __init__(self):
         self.option = webdriver.ChromeOptions()
@@ -20,6 +21,8 @@ class PuzzleScraper:
         for child in children_by_css:
             if "OK" in child.text:
                 child.click()
+                if TRACE_MODE:
+                    print("OK button clicked")
                 break
         return
 
@@ -36,6 +39,12 @@ class PuzzleScraper:
         result = []
         for i in range(5):
             result.append(grid[i * 5: (i * 5 + 5)])
+        if TRACE_MODE:
+            for i in range(5):
+                for j in range(5):
+                    print(result[i][j], end=' ')
+                print()
+                
         return result
     
     def get_clues(self):
@@ -49,6 +58,14 @@ class PuzzleScraper:
                 across.append((clue.text[0], clue.text[2:]))
             else:
                 down.append((clue.text[0], clue.text[2:]))
+        if TRACE_MODE:
+            print("ACROSS CLUES:")
+            for i, clue in enumerate(across):
+                print(i, clue)
+            print("DOWN CLUES:")
+            for i, clue in enumerate(down):
+                print(i, clue)
+                
         return across, down
 
     def get_grid_numbers(self):
@@ -73,6 +90,8 @@ class PuzzleScraper:
             for j in range(5):
                 number_row.append(numbers_grid[i * 5 + j])
             result.append(number_row)
+        if TRACE_MODE:
+            print("Got numbers on the grid")
         return result
 
 
@@ -113,7 +132,15 @@ class PuzzleScraper:
             for j in range(5):
                 row.append(grid[i * 5 + j])
             result.append(row)
+        if TRACE_MODE:
+            print("Solution is retrieved:")
+            for i in range(5):
+                for j in range(5):
+                    print(result[i][j], end=' ')
+                print()    
         return result
     
     def close_driver(self):
         self.driver.quit()
+        if TRACE_MODE:
+            print("Webdriver is closed")
