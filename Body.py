@@ -10,46 +10,17 @@ class Body(QWidget):
         super().__init__(parent)
         self.grid = grid
         self.puzzle_grid = PuzzleGrid(grid, grid_numbers, answer, parent=self)
-        self.clue_bar = Toolbar(parent=self)
         self.across_clues = ClueListWrapper("Across", across, parent=self)
         self.down_clues = ClueListWrapper("Down", down, parent=self)
         self.initUI()
 
     def initUI(self):
         hbox = QHBoxLayout()
-        buttons_and_grid = QVBoxLayout()
-        buttons_and_grid.addWidget(self.clue_bar)
-        buttons_and_grid.addWidget(self.puzzle_grid)
-        hbox.addLayout(buttons_and_grid)
+        hbox.addWidget(self.puzzle_grid)
         hbox.addWidget(self.across_clues)
         hbox.addWidget(self.down_clues)
         self.setLayout(hbox)
         self.show()
-
-class Toolbar(QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.initUI()
-        self.setMaximumWidth(16 + CELL_SIZE * len(self.parent().grid[0]))
-
-    def initUI(self):
-        hbox = QHBoxLayout()
-        puzzle_grid = self.parent().puzzle_grid
-
-        clear_btn = QPushButton("Clear")
-        clear_btn.clicked.connect(puzzle_grid.clear)
-
-        reveal_btn = QPushButton("Reveal")
-        reveal_btn.clicked.connect(puzzle_grid.fill)
-
-        solve_btn = QPushButton("Solve")
-        hbox.addSpacing(3)
-        hbox.addWidget(clear_btn)
-        hbox.addSpacing(3)
-        hbox.addWidget(reveal_btn)
-        hbox.addSpacing(3)
-        hbox.addWidget(solve_btn)
-        self.setLayout(hbox)
 
 class ClueListWrapper(QWidget):
     def __init__(self, title, clues, parent=None):
@@ -57,6 +28,7 @@ class ClueListWrapper(QWidget):
         self.initUI(title, clues)
 
     def initUI(self, title, clues):
+        self.setFixedHeight(self.parent().puzzle_grid.height() + 15)
         layout = QVBoxLayout()
         self.title = ClueListTitle(title, parent=self)
         self.list = ClueList(clues, parent=self)
@@ -67,11 +39,13 @@ class ClueListWrapper(QWidget):
 class ClueListTitle(QLabel):
     def __init__(self, title, parent=None):
         super().__init__(parent)
-        self.initUI(title)
+        self.title = title.upper()
+        self.initUI()
         
-    def initUI(self, title):
-        self.setFont(QFont("Franklin", 10))
-        self.setText(title)       
+    def initUI(self):
+        self.setFont(QFont("Helvetica"))
+        self.setStyleSheet("font-size:10pt; font-weight: 700;");
+        self.setText(self.title)       
         self.setAlignment(Qt.AlignLeft)
 
 class ClueList(QScrollArea):
@@ -84,9 +58,18 @@ class ClueList(QScrollArea):
         self.vbox = QVBoxLayout()      
 
         for clue in clues:
+            hbox = QHBoxLayout()
             str1 = ''.join(clue)
-            object = QLabel(str1)          
-            self.vbox.addWidget(object)
+            number_label = QLabel()
+            number_label.setText("<span style='font-size:10pt; font-weight:500;'>{}</span>".format(clue[0]))
+            number_label.setMaximumSize(15, 25)
+            clue_label = QLabel()   
+            clue_label.setText("<span style='font-size:10pt; font-weight:200;'>{}</span>".format(clue[1]))  
+            clue_label.setWordWrap(True)
+            hbox.addWidget(number_label, 0, Qt.AlignTop)
+            hbox.addWidget(clue_label)
+            self.vbox.addLayout(hbox)
+            self.vbox.addSpacing(5)
 
         self.vbox.addStretch(1)
         self.content.setLayout(self.vbox)
@@ -102,22 +85,13 @@ class PuzzleGrid(QWidget):
         super().__init__(parent)
         self.grid = grid
         self.grid_numbers = grid_numbers
-        self.current_fill = []
         self.answers = answers
         self.initUI()
 
     def initUI(self):
-        vbox = QVBoxLayout()
         self.setMinimumSize(10 + CELL_SIZE * len(self.grid[0]), 10 + CELL_SIZE * len(self.grid))
+        self.setMaximumHeight(10 + CELL_SIZE * len(self.grid))
         self.show()
-
-    def fill(self):
-        self.current_fill = self.answers
-        self.update()
-
-    def clear(self):
-        self.current_fill = [] 
-        self.update()
 
     def paintEvent(self, e):
         painter = QPainter(self)
@@ -146,13 +120,13 @@ class PuzzleGrid(QWidget):
                     painter.translate(-5, -5)
 
                 # Write the letter into the cell (if any) 
-                if len(self.current_fill) != 0:
-                    if self.current_fill[i][j] != ' ':
+                if len(self.answers) != 0:
+                    if self.answers[i][j] != ' ':
                         painter.setPen(QPen(Qt.black, 2, Qt.SolidLine))
                         font = QFont("Helvetica", 40)
                         painter.setFont(font)
                         painter.translate(0, 18)
-                        painter.drawText(rect, Qt.AlignCenter, self.current_fill[i][j])
+                        painter.drawText(rect, Qt.AlignCenter, self.answers[i][j])
                         painter.translate(0, -18)
                 
         # Paint the outer rectangle

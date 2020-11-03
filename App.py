@@ -7,7 +7,7 @@ from PyQt5.QtGui import QFont, QFontDatabase, QIcon
 from PyQt5.QtWidgets import QApplication, QDesktopWidget, QGridLayout, QHBoxLayout, QLabel, QMainWindow, QVBoxLayout, QWidget
 
 GROUP_NAME = "PROMINI"
-APP_SIZE = (1000, 800)
+APP_SIZE = (1200, 700)
 EMPTY_GRID = [  [' ', ' ', ' ', ' ', ' '],
                 [' ', ' ', ' ', ' ', ' '],
                 [' ', ' ', ' ', ' ', ' '],
@@ -21,7 +21,7 @@ class App(QMainWindow):
         self.setCentralWidget(self.central_widget)
         self.setWindowTitle("PROMINI NYT Mini CrossWord Solver")
         self.setWindowIcon(QIcon('nytimes.png')) 
-        self.setMinimumSize(QSize(*APP_SIZE))
+        self.setFixedSize(QSize(*APP_SIZE))
         self.setStyleSheet("background-color: white;") 
         self.center()
 
