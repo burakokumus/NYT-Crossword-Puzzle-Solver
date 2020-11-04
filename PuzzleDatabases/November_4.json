@@ -1,0 +1,38 @@
+{
+    "date": "November, 4, 2020",
+    "grid": [
+                [1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 1],
+                [0, 0, 0, 1, 1]
+            ],
+    "grid_numbers": [
+                [0, 1, 2, 3, 4],
+                [5, 0, 0, 0, 0],
+                [6, 0, 0, 0, 0],
+                [7, 0, 0, 0, 0],
+                [8, 0, 0, 0, 0]
+            ],
+    "answer": [        
+                [" ", "S", "K", "I", "P"],
+                ["S", "L", "I", "C", "E"],
+                ["C", "I", "D", "E", "R"],
+                ["A", "D", "D", "S", " "],
+                ["N", "E", "O", " ", " "]
+            ],
+    "across": [
+                ["1", "Hop happily"],
+                ["5", "Tennis shot that's most effective on grass"],
+                ["6", "Drink on a chilly fall day"],
+                ["7", "Tallies up"],
+                ["8", "A new beginning: Prefix"]
+            ],
+    "down": [
+                ["1", "PowerPoint segment"],
+                ["2", "Little buddy"],
+                ["3", "Puts a cold pack on"],
+                ["4", "\"_ my last email ...\""],
+                ["5", "Process, as a ballot"]
+            ]
+}
