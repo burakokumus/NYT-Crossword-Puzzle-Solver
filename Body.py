@@ -2,13 +2,19 @@ from PyQt5.QtCore import QRect, Qt
 from PyQt5.QtGui import QBrush, QColor, QFont, QPainter, QPen
 from PyQt5.QtWidgets import QHBoxLayout, QLabel, QScrollArea, QVBoxLayout, QWidget
 
+# Side of a cell square in pixels
 CELL_SIZE = 95
 
+'''
+Body class represents the body part of the app
+It is inherited from QWidget
+It has three parts: puzzle grid, across clues, down clues
+'''
 class Body(QWidget):
     def __init__(self, grid, grid_numbers, answer, across, down, parent=None, trace_mod=False):
         super().__init__(parent)
         self.trace_mod = trace_mod
-        self.grid = grid
+        # Initialize components
         self.puzzle_grid = PuzzleGrid(grid, grid_numbers, answer, parent=self)
         self.across_clues = ClueListWrapper("across", across, parent=self)
         self.down_clues = ClueListWrapper("down", down, parent=self)
@@ -22,6 +28,10 @@ class Body(QWidget):
         self.setLayout(hbox)
         self.show()
 
+'''
+ClueListWrapper is a container for clue list and its title
+It is inherited from QWidget
+'''
 class ClueListWrapper(QWidget):
     def __init__(self, title, clues, parent=None):
         super().__init__(parent)
@@ -30,6 +40,7 @@ class ClueListWrapper(QWidget):
         self.initUI(title, clues)
 
     def initUI(self, title, clues):
+        # Adjust height to match puzzle grid
         self.setFixedHeight(self.parent().puzzle_grid.height() + 15)
         layout = QVBoxLayout()
         self.title = ClueListTitle(title, parent=self)
@@ -38,6 +49,11 @@ class ClueListWrapper(QWidget):
         layout.addWidget(self.list)
         self.setLayout(layout)
 
+'''
+ClueListTitle represents the title of a clue list
+It is a specialized QLabel
+Turns title string to uppercase and displays in bold Helvetice font
+'''
 class ClueListTitle(QLabel):
     def __init__(self, title, parent=None):
         super().__init__(parent)
@@ -50,6 +66,11 @@ class ClueListTitle(QLabel):
         self.setText(self.title)       
         self.setAlignment(Qt.AlignLeft)
 
+'''
+ClueList is a container for clue instances
+It is inherited from QScrollArea and is scrollable
+Requires clue list with their numbers
+'''
 class ClueList(QScrollArea):
     def __init__(self, clues, parent=None):
         super().__init__(parent)
@@ -59,16 +80,24 @@ class ClueList(QScrollArea):
         self.content = QWidget()
         self.vbox = QVBoxLayout()      
 
+        # Add each clue to a horizontal box and then add the horizontal box to scroll area
         for clue in clues:
             hbox = QHBoxLayout()
+
+            # Create a label with bold text for clue numbers
             number_label = QLabel()
             number_label.setText("<span style='font-size:10pt; font-weight:500;'>{}</span>".format(clue[0]))
             number_label.setMaximumSize(15, 25)
+
+            # Create a label for clue text faithful to the original
             clue_label = QLabel()   
             clue_label.setText("<span style='font-size:10pt; font-weight:200;'>{}</span>".format(clue[1]))  
             clue_label.setWordWrap(True)
+
+
             hbox.addWidget(number_label, 0, Qt.AlignTop)
             hbox.addWidget(clue_label)
+
             self.vbox.addLayout(hbox)
             self.vbox.addSpacing(5)
 
@@ -80,7 +109,11 @@ class ClueList(QScrollArea):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setWidgetResizable(True)
         self.setWidget(self.content)
-
+    
+'''
+PuzzleGrid class displays the puzzle grid cells, question numbers and the answers
+It is inherited from QWidget
+'''
 class PuzzleGrid(QWidget):
     def __init__(self, grid, grid_numbers, answers, parent=None):
         super().__init__(parent)
@@ -96,6 +129,11 @@ class PuzzleGrid(QWidget):
         self.setMaximumHeight(10 + CELL_SIZE * len(self.grid))
         self.show()
 
+    '''
+    Rendering function of the PuzzleGrid class
+    Creates perfect square cells, paints them properly, puy little question numbers on top left of cells,
+    put correct letter in the cells 
+    '''
     def paintEvent(self, e):
         painter = QPainter(self)
 

@@ -6,21 +6,26 @@ from PyQt5.QtCore import QDate, QSize, QTime, QTimer, Qt
 from PyQt5.QtGui import QFont, QFontDatabase, QIcon
 from PyQt5.QtWidgets import QApplication, QDesktopWidget, QGridLayout, QHBoxLayout, QLabel, QMainWindow, QVBoxLayout, QWidget
 
+# Turn on trace mod for single stepping
 TRACE_MODE = True
+
 GROUP_NAME = "PROMINI"
 APP_SIZE = (1200, 700)
-EMPTY_GRID = [  [' ', ' ', ' ', ' ', ' '],
-                [' ', ' ', ' ', ' ', ' '],
-                [' ', ' ', ' ', ' ', ' '],
-                [' ', ' ', ' ', ' ', ' '],
-                [' ', ' ', ' ', ' ', ' '] ]
 
+'''
+App class builds the main frame of the application
+It is inherited from QMainWindow
+Includes attributes of the frame itself
+Content is handled by another class
+Can process data from .json file if specified, from NYT Mini Crossword webpage otherwise
+'''
 class App(QMainWindow):
     def __init__(self, custom_file=None):
         super().__init__()    
         if TRACE_MODE:
             print("Initializing the app window")
         
+        # If custom file is not specified, use puzzle scraper to gather data from NYT Mini Crossword webpage
         if custom_file is None:
             ps = PuzzleScraper(trace_mod=TRACE_MODE)
             ps.click_button()
@@ -32,6 +37,7 @@ class App(QMainWindow):
             ps.close_driver()
             self.central_widget = MainWidget(grid, grid_numbers, answer, across, down)
         
+        # Use data from given .json file in PuzzleDatabases folder
         else:
             json_file = open("./PuzzleDatabases/" + custom_file + ".json", 'r')
             data = json.load(json_file)
@@ -42,7 +48,6 @@ class App(QMainWindow):
             answer = data["answer"]
             self.central_widget = MainWidget(grid, grid_numbers, answer, across, down, date)
 
-        
         self.setCentralWidget(self.central_widget)
         self.setWindowTitle("PROMINI NYT Mini CrossWord Solver")
         self.setWindowIcon(QIcon('Resources/nytimes.png')) 
@@ -50,17 +55,28 @@ class App(QMainWindow):
         self.setStyleSheet("background-color: white;") 
         self.center()
 
+    # Makes the app appear on the center of the screen
     def center(self):
         qr = self.frameGeometry()
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
+'''
+Main widget class represents the main content of the application
+It is inherited from QWidget
+Takes puzzle and clue information 
+Date can be specified for old puzzles, it is today's date by default
+Consists of three parts: header, body and footer
+Header includes title, date, author's name
+Body is imported from another class
+Footer includes current time, date and group name
+'''
 class MainWidget(QWidget):
     def __init__(self, grid, grid_numbers, answer, across, down, date = None):
         super().__init__()  
-        # Get today's date and time
         now = QDate.currentDate() 
+        # Set date to current date if not specified
         self.todays_date = now.toString(Qt.DefaultLocaleLongDate) if date is None else date
         time = QTime.currentTime()
         self.current_time = time.toString(Qt.DefaultLocaleLongDate)
@@ -72,23 +88,33 @@ class MainWidget(QWidget):
         self.initUI()  
 
     def initUI(self):
+        # Import NYT custom font
         QFontDatabase.addApplicationFont("Resources/KarnakPro-CondensedBlack.ttf")
 
         # Header
         self.header = QVBoxLayout()
         top = QHBoxLayout()
+
+        # Header label containing the title
         header_str = "The Mini Crossword"
         header_label = QLabel(header_str)
         header_label.setFont(QFont("KarnakPro-CondensedBlack", 30))
         header_label.setAlignment(Qt.AlignBottom)
         top.addWidget(header_label)
+
+        # Date label containing the specified or today's date
         date_label = QLabel(self.todays_date)
         date_label.setFont(QFont("Franklin", 17, 10))
         date_label.setAlignment(Qt.AlignBottom)
         date_label.setIndent(7)
         top.addWidget(date_label)
+
+        # Align contents to left
         top.addStretch(1)
+
         self.header.addLayout(top)
+
+        # Label containing author's name
         joel_label = QLabel("By Joel Fagliano")
         joel_label.setFont(QFont("Franklin", 10))
         self.header.addWidget(joel_label)
@@ -101,11 +127,12 @@ class MainWidget(QWidget):
         # Footer
         self.footer = QHBoxLayout()
 
-        # creating a timer object to update the time and date every second
+        # Creating a timer object to update the time and date every second
         timer = QTimer(self) 
         timer.timeout.connect(self.show_time) 
         timer.start(1000) 
         
+        # Footer label containing current date and time along with group name
         footer_str = self.todays_date + '\n' + self.current_time + '\n' + GROUP_NAME
         self.footer_label = QLabel(footer_str)
         self.footer_label.setFont(QFont("Franklin", 10))
@@ -113,7 +140,6 @@ class MainWidget(QWidget):
         # Send footer label to the right
         self.footer.addStretch(1)
         self.footer.addWidget(self.footer_label)
-
 
         main_layout = QGridLayout()
 
@@ -129,6 +155,7 @@ class MainWidget(QWidget):
         self.setLayout(main_layout)
         self.show()
     
+    # Updates date and time attributes of the class
     def show_time(self):
         now = QDate.currentDate() 
         self.todays_date = now.toString(Qt.DefaultLocaleLongDate)
@@ -136,7 +163,6 @@ class MainWidget(QWidget):
         self.current_time = time.toString(Qt.DefaultLocaleLongDate)
         footer_str = self.todays_date + '\n' + self.current_time + '\n' + GROUP_NAME
         self.footer_label.setText(footer_str)
-
 
 def main():
     app = QApplication(sys.argv)
