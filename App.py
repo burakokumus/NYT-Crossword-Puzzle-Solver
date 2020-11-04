@@ -28,18 +28,21 @@ class App(QMainWindow):
             ps.reveal_puzzle()
             answer = ps.extract_answers()
             ps.close_driver()
+            self.central_widget = MainWidget(grid, grid_numbers, answer, across, down)
         
         else:
             json_file = open("./PuzzleDatabases/" + custom_file + ".json", 'r')
             data = json.load(json_file)
+            date = data["date"]
             grid = data["grid"]
             across, down = data["across"], data["down"]
             grid_numbers = data["grid_numbers"]
             answer = data["answer"]
+            self.central_widget = MainWidget(grid, grid_numbers, answer, across, down, date)
 
         if TRACE_MODE:
             print("Initializing the app window")
-        self.central_widget = MainWidget(grid, grid_numbers, answer, across, down)
+        
         self.setCentralWidget(self.central_widget)
         self.setWindowTitle("PROMINI NYT Mini CrossWord Solver")
         self.setWindowIcon(QIcon('Resources/nytimes.png')) 
@@ -54,11 +57,11 @@ class App(QMainWindow):
         self.move(qr.topLeft())
 
 class MainWidget(QWidget):
-    def __init__(self, grid, grid_numbers, answer, across, down):
+    def __init__(self, grid, grid_numbers, answer, across, down, date = None):
         super().__init__()  
         # Get today's date and time
         now = QDate.currentDate() 
-        self.todays_date = now.toString(Qt.DefaultLocaleLongDate)
+        self.todays_date = now.toString(Qt.DefaultLocaleLongDate) if date is None else date
         time = QTime.currentTime()
         self.current_time = time.toString(Qt.DefaultLocaleLongDate)
         self.grid = grid
@@ -73,10 +76,19 @@ class MainWidget(QWidget):
 
         # Header
         self.header = QVBoxLayout()
+        top = QHBoxLayout()
         header_str = "The Mini Crossword"
         header_label = QLabel(header_str)
         header_label.setFont(QFont("KarnakPro-CondensedBlack", 30))
-        self.header.addWidget(header_label)
+        header_label.setAlignment(Qt.AlignBottom)
+        top.addWidget(header_label)
+        date_label = QLabel(self.todays_date)
+        date_label.setFont(QFont("Franklin", 17, 10))
+        date_label.setAlignment(Qt.AlignBottom)
+        date_label.setIndent(7)
+        top.addWidget(date_label)
+        top.addStretch(1)
+        self.header.addLayout(top)
         joel_label = QLabel("By Joel Fagliano")
         joel_label.setFont(QFont("Franklin", 10))
         self.header.addWidget(joel_label)
@@ -128,7 +140,7 @@ class MainWidget(QWidget):
 
 def main():
     app = QApplication(sys.argv)
-    window = App()
+    window = App("November_4")
     window.show()
     app.exec_()
 
