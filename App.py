@@ -1,9 +1,9 @@
-from puzzle_scraper import PuzzleScraper
+import json
 import sys
+from puzzle_scraper import PuzzleScraper
 from Body import Body 
 from PyQt5.QtCore import QDate, QSize, QTime, QTimer, Qt
 from PyQt5.QtGui import QFont, QFontDatabase, QIcon
-
 from PyQt5.QtWidgets import QApplication, QDesktopWidget, QGridLayout, QHBoxLayout, QLabel, QMainWindow, QVBoxLayout, QWidget
 
 TRACE_MODE = True
@@ -16,14 +16,33 @@ EMPTY_GRID = [  [' ', ' ', ' ', ' ', ' '],
                 [' ', ' ', ' ', ' ', ' '] ]
 
 class App(QMainWindow):
-    def __init__(self, grid=EMPTY_GRID, grid_numbers=EMPTY_GRID, answer=EMPTY_GRID, across=[], down=[]):
-        super().__init__() 
+    def __init__(self, custom_file=None):
+        super().__init__()    
+        
+        if custom_file is None:
+            ps = PuzzleScraper(trace_mod=TRACE_MODE)
+            ps.click_button()
+            grid = ps.get_grid()
+            across, down = ps.get_clues()
+            grid_numbers = ps.get_grid_numbers()
+            ps.reveal_puzzle()
+            answer = ps.extract_answers()
+            ps.close_driver()
+        
+        else:
+            json_file = open("./PuzzleDatabases/" + custom_file + ".json", 'r')
+            data = json.load(json_file)
+            grid = data["grid"]
+            across, down = data["across"], data["down"]
+            grid_numbers = data["grid_numbers"]
+            answer = data["answer"]
+
         if TRACE_MODE:
             print("Initializing the app window")
         self.central_widget = MainWidget(grid, grid_numbers, answer, across, down)
         self.setCentralWidget(self.central_widget)
         self.setWindowTitle("PROMINI NYT Mini CrossWord Solver")
-        self.setWindowIcon(QIcon('nytimes.png')) 
+        self.setWindowIcon(QIcon('Resources/nytimes.png')) 
         self.setFixedSize(QSize(*APP_SIZE))
         self.setStyleSheet("background-color: white;") 
         self.center()
@@ -108,15 +127,8 @@ class MainWidget(QWidget):
 
 
 def main():
-    ps = PuzzleScraper(trace_mod=TRACE_MODE)
-    ps.click_button()
-    grid = ps.get_grid()
-    across, down = ps.get_clues()
-    grid_numbers = ps.get_grid_numbers()
-    answer = ps.reveal_puzzle()
-    ps.close_driver()
     app = QApplication(sys.argv)
-    window = App(grid, grid_numbers, answer, across, down)
+    window = App()
     window.show()
     app.exec_()
 

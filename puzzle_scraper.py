@@ -113,6 +113,7 @@ class PuzzleScraper:
         self.driver.find_element_by_xpath("/html/body/div[1]/div/div[2]/div[2]/article/div[2]/button[2]/div").click() # worked!
         self.driver.find_element_by_class_name("ModalBody-closeX--2Fmp7").click() # solution is shown after this (X button)
         
+    def extract_answers(self):
         grid = []
         for i in range(25):
             cell_path = "//*[@id=\"cell-id-" + str(i) + "\"]"

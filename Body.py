@@ -1,6 +1,6 @@
 from PyQt5.QtCore import QRect, Qt
 from PyQt5.QtGui import QBrush, QColor, QFont, QPainter, QPen
-from PyQt5.QtWidgets import QHBoxLayout, QLabel, QPushButton, QScrollArea, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QHBoxLayout, QLabel, QScrollArea, QVBoxLayout, QWidget
 
 CELL_SIZE = 95
 
@@ -61,7 +61,6 @@ class ClueList(QScrollArea):
 
         for clue in clues:
             hbox = QHBoxLayout()
-            str1 = ''.join(clue)
             number_label = QLabel()
             number_label.setText("<span style='font-size:10pt; font-weight:500;'>{}</span>".format(clue[0]))
             number_label.setMaximumSize(15, 25)
