@@ -18,6 +18,8 @@ EMPTY_GRID = [  [' ', ' ', ' ', ' ', ' '],
 class App(QMainWindow):
     def __init__(self, custom_file=None):
         super().__init__()    
+        if TRACE_MODE:
+            print("Initializing the app window")
         
         if custom_file is None:
             ps = PuzzleScraper(trace_mod=TRACE_MODE)
@@ -40,8 +42,6 @@ class App(QMainWindow):
             answer = data["answer"]
             self.central_widget = MainWidget(grid, grid_numbers, answer, across, down, date)
 
-        if TRACE_MODE:
-            print("Initializing the app window")
         
         self.setCentralWidget(self.central_widget)
         self.setWindowTitle("PROMINI NYT Mini CrossWord Solver")
@@ -140,7 +140,7 @@ class MainWidget(QWidget):
 
 def main():
     app = QApplication(sys.argv)
-    window = App("November_4")
+    window = App()
     window.show()
     app.exec_()
 
