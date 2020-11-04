@@ -4,7 +4,19 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 
+'''
+PuzzleScraper class retrieves the puzzle data from the NYT Mini Crossword webpage using
+Selenium which is a Python library for webscraping. It accesses the website using Google 
+Chrome webdriver. Then, It makes the necessary actions such as clicking the buttons, and 
+reading the puzzle grid in order to get the necessary information.
+'''
 class PuzzleScraper:
+    
+    '''
+    In the initializer of the class, the Selenium webdriver is initialized and it connects
+    to the webpage. After connecting, it maximizes the browser window and scrolls down a little
+    bit so that the rest of the operations can be completed without encountring any problems.
+    '''
     def __init__(self, trace_mod=False):
         self.trace_mod = trace_mod
         self.option = webdriver.ChromeOptions()
@@ -13,7 +25,11 @@ class PuzzleScraper:
         self.driver.get("https://www.nytimes.com/crosswords/game/mini")
         self.driver.maximize_window()
         self.driver.execute_script("window.scrollTo(0, 300)") 
-
+    
+    '''
+    click_button function presses the OK button that appears below the question "Ready
+    to get started?".
+    '''
     def click_button(self):
         clas = "buttons-modalButtonContainer--35RTh"
         class_element = self.driver.find_element_by_class_name(clas)
@@ -26,6 +42,10 @@ class PuzzleScraper:
                 break
         return
 
+    '''
+    get_grid function retrieves the color structure of the empty puzzle grid.
+    1 represents black and 0 represents white.
+    '''
     def get_grid(self):
         grid = []
         for i in range(25):
@@ -48,6 +68,10 @@ class PuzzleScraper:
                 
         return result
     
+    '''
+    get_clues function retrieves the clues and separates them as Across and Down.
+    Then it returns two arrays representing these two categories.
+    '''
     def get_clues(self):
         across = []
         down = []
@@ -70,6 +94,11 @@ class PuzzleScraper:
                 
         return across, down
 
+    '''
+    get_grid_numbers function retrieves the location of the question numbers on
+    the grid. It returns a 5x5 array that has the question numbers in the correct
+    cells. Cells without numbers are represented as 0.
+    '''
     def get_grid_numbers(self):
         numbers_grid = []
         for i in range(25):
@@ -96,12 +125,11 @@ class PuzzleScraper:
             print("Received question numbers on the grid")
         return result
 
-
-
+    '''
+    reveal_puzzle function clicks the necessary buttons in order to reveal
+    the official solution of the puzzle.
+    '''
     def reveal_puzzle(self):
-        # not reliable
-        # reveal_xpath = "/html/body/div[1]/div/div/div[4]/div/main/div[2]/div/div/ul/div[2]/li[2]/button"
-        # self.driver.find_element_by_xpath(reveal_xpath).click() # 1
         
         toolbar = self.driver.find_element_by_class_name("Toolbar-expandedMenu--2s4M4")
         toolbar_children = toolbar.find_elements_by_css_selector("*")
@@ -113,6 +141,10 @@ class PuzzleScraper:
         self.driver.find_element_by_xpath("/html/body/div[1]/div/div[2]/div[2]/article/div[2]/button[2]/div").click() # worked!
         self.driver.find_element_by_class_name("ModalBody-closeX--2Fmp7").click() # solution is shown after this (X button)
         
+    '''
+    extract_answers function retrieves the solution grid from the page and
+    returns the letters as a 5x5 array. Black cells are represented with space.
+    '''
     def extract_answers(self):
         grid = []
         for i in range(25):
@@ -143,6 +175,9 @@ class PuzzleScraper:
                 print()    
         return result
     
+    '''
+    Close driver function closes the Selenium webdriver.
+    '''
     def close_driver(self):
         self.driver.quit()
         if self.trace_mod:
