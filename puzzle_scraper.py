@@ -4,9 +4,9 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 
-TRACE_MODE = True
 class PuzzleScraper:
-    def __init__(self):
+    def __init__(self, trace_mod=False):
+        self.trace_mod = trace_mod
         self.option = webdriver.ChromeOptions()
         self.option.add_argument('--log-level=3')
         self.driver = webdriver.Chrome("./chromedriver", options=self.option)
@@ -21,7 +21,7 @@ class PuzzleScraper:
         for child in children_by_css:
             if "OK" in child.text:
                 child.click()
-                if TRACE_MODE:
+                if self.trace_mod:
                     print("OK button clicked")
                 break
         return
@@ -39,7 +39,8 @@ class PuzzleScraper:
         result = []
         for i in range(5):
             result.append(grid[i * 5: (i * 5 + 5)])
-        if TRACE_MODE:
+        if self.trace_mod:
+            print("Received grid:")
             for i in range(5):
                 for j in range(5):
                     print(result[i][j], end=' ')
@@ -58,11 +59,12 @@ class PuzzleScraper:
                 across.append((clue.text[0], clue.text[2:]))
             else:
                 down.append((clue.text[0], clue.text[2:]))
-        if TRACE_MODE:
-            print("ACROSS CLUES:")
+        if self.trace_mod:
+            print("Received clues:")
+            print("ACROSS:")
             for i, clue in enumerate(across):
                 print(i, clue)
-            print("DOWN CLUES:")
+            print("DOWN:")
             for i, clue in enumerate(down):
                 print(i, clue)
                 
@@ -90,8 +92,8 @@ class PuzzleScraper:
             for j in range(5):
                 number_row.append(numbers_grid[i * 5 + j])
             result.append(number_row)
-        if TRACE_MODE:
-            print("Got numbers on the grid")
+        if self.trace_mod:
+            print("Received question numbers on the grid")
         return result
 
 
@@ -132,8 +134,8 @@ class PuzzleScraper:
             for j in range(5):
                 row.append(grid[i * 5 + j])
             result.append(row)
-        if TRACE_MODE:
-            print("Solution is retrieved:")
+        if self.trace_mod:
+            print("Received offical solution:")
             for i in range(5):
                 for j in range(5):
                     print(result[i][j], end=' ')
@@ -142,5 +144,5 @@ class PuzzleScraper:
     
     def close_driver(self):
         self.driver.quit()
-        if TRACE_MODE:
+        if self.trace_mod:
             print("Webdriver is closed")

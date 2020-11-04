@@ -6,6 +6,7 @@ from PyQt5.QtGui import QFont, QFontDatabase, QIcon
 
 from PyQt5.QtWidgets import QApplication, QDesktopWidget, QGridLayout, QHBoxLayout, QLabel, QMainWindow, QVBoxLayout, QWidget
 
+TRACE_MODE = True
 GROUP_NAME = "PROMINI"
 APP_SIZE = (1000, 800)
 EMPTY_GRID = [  [' ', ' ', ' ', ' ', ' '],
@@ -16,7 +17,9 @@ EMPTY_GRID = [  [' ', ' ', ' ', ' ', ' '],
 
 class App(QMainWindow):
     def __init__(self, grid=EMPTY_GRID, grid_numbers=EMPTY_GRID, answer=EMPTY_GRID, across=[], down=[]):
-        super().__init__()  
+        super().__init__() 
+        if TRACE_MODE:
+            print("Initializing the app window")
         self.central_widget = MainWidget(grid, grid_numbers, answer, across, down)
         self.setCentralWidget(self.central_widget)
         self.setWindowTitle("PROMINI NYT Mini CrossWord Solver")
@@ -62,7 +65,7 @@ class MainWidget(QWidget):
         # Body (or middle part)
         self.body = QHBoxLayout()
         self.body.setSpacing(10)
-        self.body.addWidget(Body(self.grid, self.grid_numbers, self.answer, self.across, self.down, parent=self))
+        self.body.addWidget(Body(self.grid, self.grid_numbers, self.answer, self.across, self.down, parent=self, trace_mod=TRACE_MODE))
 
         # Footer
         self.footer = QHBoxLayout()
@@ -105,7 +108,7 @@ class MainWidget(QWidget):
 
 
 def main():
-    ps = PuzzleScraper()
+    ps = PuzzleScraper(trace_mod=TRACE_MODE)
     ps.click_button()
     grid = ps.get_grid()
     across, down = ps.get_clues()

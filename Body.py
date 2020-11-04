@@ -1,18 +1,18 @@
-import sys
 from PyQt5.QtCore import QRect, Qt
-from PyQt5.QtGui import QBrush, QColor, QFont, QFontDatabase, QPainter, QPen
-from PyQt5.QtWidgets import QApplication, QHBoxLayout, QLabel, QPushButton, QScrollArea, QSizePolicy, QVBoxLayout, QWidget
+from PyQt5.QtGui import QBrush, QColor, QFont, QPainter, QPen
+from PyQt5.QtWidgets import QHBoxLayout, QLabel, QPushButton, QScrollArea, QVBoxLayout, QWidget
 
 CELL_SIZE = 95
 
 class Body(QWidget):
-    def __init__(self, grid, grid_numbers, answer, across, down, parent=None):
+    def __init__(self, grid, grid_numbers, answer, across, down, parent=None, trace_mod=False):
         super().__init__(parent)
+        self.trace_mod = trace_mod
         self.grid = grid
         self.puzzle_grid = PuzzleGrid(grid, grid_numbers, answer, parent=self)
         self.clue_bar = Toolbar(parent=self)
-        self.across_clues = ClueListWrapper("Across", across, parent=self)
-        self.down_clues = ClueListWrapper("Down", down, parent=self)
+        self.across_clues = ClueListWrapper("across", across, parent=self)
+        self.down_clues = ClueListWrapper("down", down, parent=self)
         self.initUI()
 
     def initUI(self):
@@ -54,6 +54,8 @@ class Toolbar(QWidget):
 class ClueListWrapper(QWidget):
     def __init__(self, title, clues, parent=None):
         super().__init__(parent)
+        if self.parent().trace_mod:
+            print("Initializing {} clues".format(title))
         self.initUI(title, clues)
 
     def initUI(self, title, clues):
@@ -100,6 +102,8 @@ class ClueList(QScrollArea):
 class PuzzleGrid(QWidget):
     def __init__(self, grid, grid_numbers, answers, parent=None):
         super().__init__(parent)
+        if self.parent().trace_mod:
+            print("Initializing the grid")
         self.grid = grid
         self.grid_numbers = grid_numbers
         self.current_fill = []
