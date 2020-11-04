@@ -1,0 +1,38 @@
+{
+    "date": "Thursday, October 29, 2020",
+    "grid": [
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 1],
+                [1, 0, 0, 0, 1]
+            ],
+    "grid_numbers": [
+                [1, 2, 3, 4, 5],
+                [6, 0, 0, 0, 0],
+                [7, 0, 0, 0, 0],
+                [0, 8, 0, 0, 0],
+                [0, 9, 0, 0, 0]
+            ],
+    "answer": [        
+                ["B", "L", "I", "S", "S"],
+                ["A", "U", "D", "I", "O"],
+                ["G", "N", "A", "T", "S"],
+                [" ", "C", "H", "I", " "],
+                [" ", "H", "O", "N", " "]
+            ],
+    "across": [
+                ["1", "Seventh heaven"],
+                ["6", "What the mute button affects"],
+                ["7", "Bugs in a summer swarm"],
+                ["8", "Tai___ (meditative exercise)"],
+                ["9", "Sweetheart"]
+            ],
+    "down": [
+                ["1", "See 2-Down"],
+                ["2", "With 1-Down, brown paper container"],
+                ["3", "State whose panhandle borders Canada"],
+                ["4", "Protest that doesn't go anywhere"],
+                ["5", "Mayday!"]
+            ]
+}
