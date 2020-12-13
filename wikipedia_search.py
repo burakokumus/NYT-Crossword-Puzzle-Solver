@@ -1,25 +1,51 @@
 
 import wikipedia
+import nltk
+from nltk.corpus import stopwords
+import datetime
+import string
 
-# https://pypi.org/project/Wikipedia-API/
+def has_numbers(inputString):
+    return any(char.isdigit() for char in inputString)
 
-# wiki_wiki = wikipediaapi.Wikipedia('en')
+def remove_punctuation(inputString):
+    return inputString.translate(str.maketrans('', '', string.punctuation))
 
-# page_py = wiki_wiki.page('yo-yo ma')
-# print(page_py.exists())
+def wikipedia_search(input_string):
+    list = wikipedia.search(input_string)
+    
+    page_content = wikipedia.page(list[0] + '.').content
+    
+    all_words = page_content.split(' ')
 
-# page_py = wiki_wiki.page('Yo-yo Ma')
-# print(page_py.exists())
+    unique_words = set(all_words) # remove duplicates
 
-# page_py = wiki_wiki.page('Yo-yo ma')
-# print(page_py.exists())
+    words_without_punc = [remove_punctuation(x) for x in unique_words]
+    
+    short_words = [x for x in words_without_punc if len(x) <= 5 and len(x) > 1] # find all words with less than or equal to 5 characters
 
-# page_py = wiki_wiki.page('yo-yo Ma')
-# print(page_py.exists())
+    none_number_words = [x for x in short_words if not has_numbers(x)]
 
-list = wikipedia.search("yo yo ma")
-print(list[0])
-print(wikipedia.summary("Yo-Yo Ma!"))
+    none_stop_words = [x for x in none_number_words if x not in stopwords.words('english')] # remove stop-words
+
+    lower_case = [x.lower() for x in none_stop_words]
+    
+    return lower_case
+
+if __name__ == "__main__":
+    start_time = datetime.datetime.now()
+    words = wikipedia_search("Barrack Obama")
+    print(words)
+    print("Found {} words".format(len(words)))
+    end_time = datetime.datetime.now()
+    time_diff = (end_time - start_time)
+    execution_time = time_diff.total_seconds()
+    print("Exec time: {}".format(execution_time))
+    pass
+
+
+
+
 
 
 '''
