@@ -7,7 +7,7 @@ from PyQt5.QtGui import QFont, QFontDatabase, QIcon
 from PyQt5.QtWidgets import QApplication, QDesktopWidget, QGridLayout, QHBoxLayout, QLabel, QMainWindow, QVBoxLayout, QWidget
 
 GROUP_NAME = "PROMINI"
-APP_SIZE = (1200, 700)
+APP_SIZE = (1800, 700)
 
 '''
 App class builds the main frame of the application
