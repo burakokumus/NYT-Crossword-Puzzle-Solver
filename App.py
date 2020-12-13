@@ -7,7 +7,7 @@ from PyQt5.QtGui import QFont, QFontDatabase, QIcon
 from PyQt5.QtWidgets import QApplication, QDesktopWidget, QGridLayout, QHBoxLayout, QLabel, QMainWindow, QVBoxLayout, QWidget
 
 GROUP_NAME = "PROMINI"
-APP_SIZE = (1800, 700)
+APP_SIZE = (1700, 700)
 
 '''
 App class builds the main frame of the application
@@ -32,18 +32,21 @@ class App(QMainWindow):
             ps.reveal_puzzle()
             answer = ps.extract_answers()
             ps.close_driver()
-            self.central_widget = MainWidget(grid, grid_numbers, answer, across, down, trace_mod=trace_mod)
+            official_sol = {
+                "grid": grid,
+                "across": across,
+                "down": down,
+                "grid_numbers": grid_numbers,
+                "answer": answer
+            }
+            self.central_widget = MainWidget(official_sol, trace_mod=trace_mod)
         
         # Use data from given .json file in PuzzleDatabases folder
         else:
             json_file = open("./PuzzleDatabases/" + custom_file + ".json", 'r')
             data = json.load(json_file)
             date = data["date"]
-            grid = data["grid"]
-            across, down = data["across"], data["down"]
-            grid_numbers = data["grid_numbers"]
-            answer = data["answer"]
-            self.central_widget = MainWidget(grid, grid_numbers, answer, across, down, date)
+            self.central_widget = MainWidget(data, date=date)
 
         self.setCentralWidget(self.central_widget)
         self.setWindowTitle("PROMINI NYT Mini CrossWord Solver")
@@ -70,18 +73,18 @@ Body is imported from another class
 Footer includes current time, date and group name
 '''
 class MainWidget(QWidget):
-    def __init__(self, grid, grid_numbers, answer, across, down, date = None, trace_mod=False):
+    def __init__(self, official_sol, date = None, trace_mod=False):
         super().__init__()  
         now = QDate.currentDate() 
         # Set date to current date if not specified
         self.todays_date = now.toString(Qt.DefaultLocaleLongDate) if date is None else date
         time = QTime.currentTime()
         self.current_time = time.toString(Qt.DefaultLocaleLongDate)
-        self.grid = grid
-        self.grid_numbers = grid_numbers
-        self.answer = answer
-        self.across = across
-        self.down = down
+        self.grid = official_sol["grid"]
+        self.grid_numbers = official_sol["grid_numbers"]
+        self.answer = official_sol["answer"]
+        self.across = official_sol["across"]
+        self.down = official_sol["down"]
         self.trace_mod = trace_mod
         self.initUI()  
 
