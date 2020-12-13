@@ -15,16 +15,18 @@ class Body(QWidget):
         super().__init__(parent)
         self.trace_mod = trace_mod
         # Initialize components
-        self.puzzle_grid = PuzzleGrid(grid, grid_numbers, answer, parent=self)
-        self.across_clues = ClueListWrapper("across", across, parent=self)
-        self.down_clues = ClueListWrapper("down", down, parent=self)
+        self.official = PuzzleGrid(grid, grid_numbers, answer, parent=self)
+        self.across_clues = ClueListWrapper("across", across, self.official.height(), parent=self)
+        self.down_clues = ClueListWrapper("down", down, self.official.height(), parent=self)
+        self.promini_sol = PuzzleGrid(grid, grid_numbers, answer, parent=self)
         self.initUI()
 
     def initUI(self):
         hbox = QHBoxLayout()
-        hbox.addWidget(self.puzzle_grid)
+        hbox.addWidget(self.official)
         hbox.addWidget(self.across_clues)
         hbox.addWidget(self.down_clues)
+        hbox.addWidget(self.promini_sol)
         self.setLayout(hbox)
         self.show()
 
@@ -33,15 +35,15 @@ ClueListWrapper is a container for clue list and its title
 It is inherited from QWidget
 '''
 class ClueListWrapper(QWidget):
-    def __init__(self, title, clues, parent=None):
+    def __init__(self, title, clues, height, parent=None):
         super().__init__(parent)
         if self.parent().trace_mod:
             print("Initializing {} clues".format(title))
-        self.initUI(title, clues)
+        self.initUI(title, clues, height)
 
-    def initUI(self, title, clues):
+    def initUI(self, title, clues, height):
         # Adjust height to match puzzle grid
-        self.setFixedHeight(self.parent().puzzle_grid.height() + 15)
+        self.setFixedHeight(height + 15)
         layout = QVBoxLayout()
         self.title = ClueListTitle(title, parent=self)
         self.list = ClueList(clues, parent=self)

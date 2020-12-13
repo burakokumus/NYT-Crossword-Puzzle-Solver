@@ -6,11 +6,8 @@ from PyQt5.QtCore import QDate, QSize, QTime, QTimer, Qt
 from PyQt5.QtGui import QFont, QFontDatabase, QIcon
 from PyQt5.QtWidgets import QApplication, QDesktopWidget, QGridLayout, QHBoxLayout, QLabel, QMainWindow, QVBoxLayout, QWidget
 
-# Turn on trace mod for single stepping
-TRACE_MODE = True
-
 GROUP_NAME = "PROMINI"
-APP_SIZE = (1200, 700)
+APP_SIZE = (1700, 700)
 
 '''
 App class builds the main frame of the application
@@ -20,14 +17,14 @@ Content is handled by another class
 Can process data from .json file if specified, from NYT Mini Crossword webpage otherwise
 '''
 class App(QMainWindow):
-    def __init__(self, custom_file=None):
+    def __init__(self, custom_file=None, trace_mod=False):
         super().__init__()    
-        if TRACE_MODE:
+        if trace_mod:
             print("Initializing the app window")
         
         # If custom file is not specified, use puzzle scraper to gather data from NYT Mini Crossword webpage
         if custom_file is None:
-            ps = PuzzleScraper(trace_mod=TRACE_MODE)
+            ps = PuzzleScraper(trace_mod=trace_mod)
             ps.click_button()
             grid = ps.get_grid()
             across, down = ps.get_clues()
@@ -35,18 +32,21 @@ class App(QMainWindow):
             ps.reveal_puzzle()
             answer = ps.extract_answers()
             ps.close_driver()
-            self.central_widget = MainWidget(grid, grid_numbers, answer, across, down)
+            official_sol = {
+                "grid": grid,
+                "across": across,
+                "down": down,
+                "grid_numbers": grid_numbers,
+                "answer": answer
+            }
+            self.central_widget = MainWidget(official_sol, trace_mod=trace_mod)
         
         # Use data from given .json file in PuzzleDatabases folder
         else:
             json_file = open("./PuzzleDatabases/" + custom_file + ".json", 'r')
             data = json.load(json_file)
             date = data["date"]
-            grid = data["grid"]
-            across, down = data["across"], data["down"]
-            grid_numbers = data["grid_numbers"]
-            answer = data["answer"]
-            self.central_widget = MainWidget(grid, grid_numbers, answer, across, down, date)
+            self.central_widget = MainWidget(data, date=date)
 
         self.setCentralWidget(self.central_widget)
         self.setWindowTitle("PROMINI NYT Mini CrossWord Solver")
@@ -73,18 +73,19 @@ Body is imported from another class
 Footer includes current time, date and group name
 '''
 class MainWidget(QWidget):
-    def __init__(self, grid, grid_numbers, answer, across, down, date = None):
+    def __init__(self, official_sol, date = None, trace_mod=False):
         super().__init__()  
         now = QDate.currentDate() 
         # Set date to current date if not specified
         self.todays_date = now.toString(Qt.DefaultLocaleLongDate) if date is None else date
         time = QTime.currentTime()
         self.current_time = time.toString(Qt.DefaultLocaleLongDate)
-        self.grid = grid
-        self.grid_numbers = grid_numbers
-        self.answer = answer
-        self.across = across
-        self.down = down
+        self.grid = official_sol["grid"]
+        self.grid_numbers = official_sol["grid_numbers"]
+        self.answer = official_sol["answer"]
+        self.across = official_sol["across"]
+        self.down = official_sol["down"]
+        self.trace_mod = trace_mod
         self.initUI()  
 
     def initUI(self):
@@ -122,7 +123,7 @@ class MainWidget(QWidget):
         # Body (or middle part)
         self.body = QHBoxLayout()
         self.body.setSpacing(10)
-        self.body.addWidget(Body(self.grid, self.grid_numbers, self.answer, self.across, self.down, parent=self, trace_mod=TRACE_MODE))
+        self.body.addWidget(Body(self.grid, self.grid_numbers, self.answer, self.across, self.down, parent=self, trace_mod=self.trace_mod))
 
         # Footer
         self.footer = QHBoxLayout()
@@ -165,8 +166,9 @@ class MainWidget(QWidget):
         self.footer_label.setText(footer_str)
 
 def main():
+    trace_mod = input("Do you want single stepping? (y/n):") in ["y", "Y", "yes", "Yes"]
     app = QApplication(sys.argv)
-    window = App()
+    window = App(trace_mod=trace_mod)
     window.show()
     app.exec_()
 
