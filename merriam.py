@@ -33,6 +33,8 @@ def get_dictionary_result(word):
     dict_url = "https://www.dictionaryapi.com/api/v3/references/collegiate/json/" + word + "?key=" + DICTIONARY_KEY
     response = requests.get(dict_url)
     r = response.json()
+    f = open("meriam.json", "w")
+    json.dump(r, f, indent=2)
     definitions = []
     related = False
     for result in r:
@@ -40,9 +42,13 @@ def get_dictionary_result(word):
         for meta_items in result["meta"].items():
             # If result is not the exact match of the word, skip
             if meta_items[0] == "id":
-                if meta_items[1] == word:
+                if len(meta_items[1]) == len(word) and meta_items[1] == word:
                     related = True
-                    break
+                else:
+                    words = meta_items[1].split(" ")
+                    if len(words) == 1 and words[0][len(word)] == ':': 
+                        related = True
+                break
         if related:
             # Add each definition
             for definition in result["shortdef"]:
