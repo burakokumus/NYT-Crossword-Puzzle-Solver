@@ -12,6 +12,8 @@ def get_ants_and_syns(word):
     synonyms = []
     antonyms = []
     for result in r:
+        if type(result) == str:
+            return [], []
         for fields in result["meta"].items():
             # If result is not the exact match of the word, skip
             if fields[0] == "id":
@@ -33,16 +35,16 @@ def get_dictionary_result(word):
     dict_url = "https://www.dictionaryapi.com/api/v3/references/collegiate/json/" + word + "?key=" + DICTIONARY_KEY
     response = requests.get(dict_url)
     r = response.json()
-    f = open("meriam.json", "w")
-    json.dump(r, f, indent=2)
     definitions = []
     related = False
     for result in r:
+        if type(result) == str:
+            return []
         related = False
         for meta_items in result["meta"].items():
             # If result is not the exact match of the word, skip
             if meta_items[0] == "id":
-                if len(meta_items[1]) == len(word) and meta_items[1] == word:
+                if len(meta_items[1]) == len(word):
                     related = True
                 else:
                     words = meta_items[1].split(" ")
