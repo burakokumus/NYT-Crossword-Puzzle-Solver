@@ -4,6 +4,7 @@ import nltk
 from nltk.corpus import stopwords
 import datetime
 import string
+import word_eliminator
 
 def has_numbers(inputString):
     return any(char.isdigit() for char in inputString)
@@ -18,17 +19,17 @@ def wikipedia_search(input_string):
     
     all_words = page_content.split(' ')
 
-    unique_words = set(all_words) # remove duplicates
+    unique_words = word_eliminator.eliminate_duplicates(all_words)
 
-    words_without_punc = [remove_punctuation(x) for x in unique_words]
+    words_without_punc = word_eliminator.eliminate_punctuation(unique_words)
     
-    short_words = [x for x in words_without_punc if len(x) <= 5 and len(x) > 1] # find all words with less than or equal to 5 characters
+    short_words = word_eliminator.eliminate_long_words(words_without_punc)
 
-    none_number_words = [x for x in short_words if not has_numbers(x)]
+    nonnumber_words = word_eliminator.eliminate_numbers(short_words)
 
-    none_stop_words = [x for x in none_number_words if x not in stopwords.words('english')] # remove stop-words
+    nonstop_words = word_eliminator.eliminate_stop_words(nonnumber_words)
 
-    lower_case = [x.lower() for x in none_stop_words]
+    lower_case = word_eliminator.to_lower_case(nonstop_words)
     
     return lower_case
 
