@@ -11,14 +11,14 @@ It is inherited from QWidget
 It has three parts: puzzle grid, across clues, down clues
 '''
 class Body(QWidget):
-    def __init__(self, grid, grid_numbers, answer, across, down, parent=None, trace_mod=False):
+    def __init__(self, grid, grid_numbers, answer, across, down, our_answer, parent=None, trace_mod=False):
         super().__init__(parent)
         self.trace_mod = trace_mod
         # Initialize components
         self.official = PuzzleGrid(grid, grid_numbers, answer, parent=self)
         self.across_clues = ClueListWrapper("across", across, self.official.height(), parent=self)
         self.down_clues = ClueListWrapper("down", down, self.official.height(), parent=self)
-        self.promini_sol = PuzzleGrid(grid, grid_numbers, answer, parent=self)
+        self.promini_sol = PuzzleGrid(grid, grid_numbers, our_answer, parent=self)
         self.initUI()
 
     def initUI(self):
