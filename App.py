@@ -1,6 +1,7 @@
 import json
 import sys
 from puzzle_scraper import PuzzleScraper
+from solver import solve
 from Body import Body 
 from PyQt5.QtCore import QDate, QSize, QTime, QTimer, Qt
 from PyQt5.QtGui import QFont, QFontDatabase, QIcon
@@ -39,7 +40,8 @@ class App(QMainWindow):
                 "grid_numbers": grid_numbers,
                 "answer": answer
             }
-            self.central_widget = MainWidget(official_sol, trace_mod=trace_mod)
+            our_answer = solve(grid, across, down, grid_numbers)
+            self.central_widget = MainWidget(official_sol, our_answer, trace_mod=trace_mod)
         
         # Use data from given .json file in PuzzleDatabases folder
         else:
@@ -73,7 +75,7 @@ Body is imported from another class
 Footer includes current time, date and group name
 '''
 class MainWidget(QWidget):
-    def __init__(self, official_sol, date = None, trace_mod=False):
+    def __init__(self, official_sol, our_answer, date = None, trace_mod=False):
         super().__init__()  
         now = QDate.currentDate() 
         # Set date to current date if not specified
@@ -85,6 +87,7 @@ class MainWidget(QWidget):
         self.answer = official_sol["answer"]
         self.across = official_sol["across"]
         self.down = official_sol["down"]
+        self.our_answer = our_answer
         self.trace_mod = trace_mod
         self.initUI()  
 
@@ -123,7 +126,7 @@ class MainWidget(QWidget):
         # Body (or middle part)
         self.body = QHBoxLayout()
         self.body.setSpacing(10)
-        self.body.addWidget(Body(self.grid, self.grid_numbers, self.answer, self.across, self.down, parent=self, trace_mod=self.trace_mod))
+        self.body.addWidget(Body(self.grid, self.grid_numbers, self.answer, self.across, self.down, self.our_answer, parent=self, trace_mod=self.trace_mod))
 
         # Footer
         self.footer = QHBoxLayout()
