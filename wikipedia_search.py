@@ -3,13 +3,7 @@ import wikipedia
 import nltk
 from nltk.corpus import stopwords
 import datetime
-import string
-
-def has_numbers(inputString):
-    return any(char.isdigit() for char in inputString)
-
-def remove_punctuation(inputString):
-    return inputString.translate(str.maketrans('', '', string.punctuation))
+from solver import process_list
 
 def wikipedia_search(input_string):
     list = wikipedia.search(input_string)
@@ -17,7 +11,7 @@ def wikipedia_search(input_string):
     page_content = wikipedia.page(list[0] + '.').content
     
     all_words = page_content.split(' ')
-
+    '''
     unique_words = set(all_words) # remove duplicates
 
     words_without_punc = [remove_punctuation(x) for x in unique_words]
@@ -29,8 +23,8 @@ def wikipedia_search(input_string):
     none_stop_words = [x for x in none_number_words if x not in stopwords.words('english')] # remove stop-words
 
     lower_case = [x.lower() for x in none_stop_words]
-    
-    return lower_case
+    '''
+    return process_list(all_words)
 
 if __name__ == "__main__":
     start_time = datetime.datetime.now()

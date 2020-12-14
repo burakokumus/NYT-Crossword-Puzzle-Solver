@@ -4,3 +4,5 @@ chromedriver.exe
 .vscode/settings.json
 
 __pycache__/
+
+credentials.json
