@@ -3,7 +3,11 @@ import urllib.request as urllib2
 
 def get_data(query):
     api_url = 'https://api.datamuse.com/' + query
-    return json.load(urllib2.urlopen(api_url))
+    result = json.load(urllib2.urlopen(api_url))
+    result_list = []
+    for res in result:
+        result_list.append(res["word"])
+    return result_list
 
 # word
 def get_words_with_similar_meaning(input_word):
@@ -53,4 +57,3 @@ def get_related_ends_with(word, starting_letter):
 def get_often_follows_starts_with(word, starting_letter):
     query = "/words?lc=" + word + "&sp=" + starting_letter + "*"
     return get_data(query)
-
