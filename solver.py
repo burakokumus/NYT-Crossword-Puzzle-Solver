@@ -90,7 +90,7 @@ def find_candidates(clue, length):
     candidates_list.extend(google_results)
     wikipedia_results = wikipedia_search.wikipedia_search(filtered_clue, length)
     candidates_list.extend(wikipedia_results)
-    datamuse_results = datamuse.get_words_with_similar_meaning(clue)
+    datamuse_results = datamuse.get_words_with_similar_meaning(clue, length)
     candidates_list.extend(datamuse_results)
     candidates_list = word_eliminator.eliminate_duplicates(candidates_list)
     return candidates_list
