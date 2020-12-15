@@ -1,8 +1,6 @@
 import json
 import urllib.request as urllib2
 
-prompt = input("Do you want to search for a complete word, word and a letter or letters? ")
-
 def get_data(query):
     api_url = 'https://api.datamuse.com/' + query
     return json.load(urllib2.urlopen(api_url))
@@ -55,3 +53,4 @@ def get_related_ends_with(word, starting_letter):
 def get_often_follows_starts_with(word, starting_letter):
     query = "/words?lc=" + word + "&sp=" + starting_letter + "*"
     return get_data(query)
+

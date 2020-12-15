@@ -41,10 +41,101 @@ def solve(  grid, across, down, grid_numbers):
     across_clue_lengths = get_clue_lengths(grid, grid_numbers, across, "across")
     down_clue_lengths = get_clue_lengths(grid, grid_numbers, down, "down")
 
-    print(across_clue_lengths)
-    print(down_clue_lengths)
+    across_candidates_list = [
+            (1, ["TAB"]),
+            (4, ["SMILE"]),
+            (6, ["KAPPA"]),
+            (7, ["ITSON"]),
+            (8, ["SHY", "CRY", "BAD"])
+            ]
+    down_candidates_list = [ 
+        (4, ["SKIS"]),
+        (5, ["MATH"]),
+        (1, ["ABCDY", "1234Y", "ABOUT", "TIPSY"]),
+        (2, ["ALPO"]),
+        (3, ["BEAN"])
+        ]
+
+    results = insert_clues(grid, grid_numbers, answer, across_candidates_list, down_candidates_list)
+    for result in results:
+        for row in result:
+            print(row)
+        print("------")
 
     return answer
+
+def insert_clues(grid, grid_numbers, current_grid, across_candidates_list, down_candidates_list):
+    across_count = len(across_candidates_list) - 1
+    down_count = len(down_candidates_list) - 1
+    possible_answers = [ [row[:] for row in current_grid] ]
+
+    while across_count >= 0 and down_count >= 0:
+        next_across = across_candidates_list[across_count]
+        start_acc, end_acc = start_and_end(grid, grid_numbers, int(next_across[0]), "across")
+        current_findings = []
+        for possible_answer in possible_answers:
+            for candidate in next_across[1]:
+                try_to_insert = insert_to_grid(possible_answer, start_acc, end_acc, candidate)
+                if try_to_insert is not None:
+                    current_findings.append(try_to_insert)
+        across_count -= 1
+        possible_answers = current_findings
+        current_findings = []
+        next_down = down_candidates_list[down_count]
+        start_dwn, end_dwn = start_and_end(grid, grid_numbers, int(next_down[0]), "down")
+        for possible_answer in possible_answers:
+            for candidate in next_down[1]:
+                try_to_insert = insert_to_grid(possible_answer, start_dwn, end_dwn, candidate)
+                if try_to_insert is not None:
+                    current_findings.append(try_to_insert)
+        down_count -= 1
+        possible_answers = current_findings
+
+    # If left
+    while across_count >= 0:
+        next_across = across_candidates_list[across_count]
+        start_acc, end_acc = start_and_end(grid, grid_numbers, int(next_across[0]), "across")
+        current_findings = []
+        for possible_answer in possible_answers:
+            for candidate in next_across[1]:
+                try_to_insert = insert_to_grid(possible_answer, start_acc, end_acc, candidate)
+                if try_to_insert is not None:
+                    current_findings.append(try_to_insert)
+        across_count -= 1
+        possible_answers = current_findings
+
+    while down_count >= 0:
+        next_across = across_candidates_list[across_count]
+        start_acc, end_acc = start_and_end(grid, grid_numbers, int(next_across[0]), "across")
+        current_findings = []
+        for possible_answer in possible_answers:
+            for candidate in next_across[1]:
+                try_to_insert = insert_to_grid(possible_answer, start_acc, end_acc, candidate)
+                if try_to_insert is not None:
+                    current_findings.append(try_to_insert)
+        across_count -= 1
+        possible_answers = current_findings
+    
+    return possible_answers
+
+def insert_to_grid(current_grid, start, end, word):
+    temp_grid = [row[:] for row in current_grid]
+    x = start[0]
+    y = start[1]
+    while x <= end[0] and y <= end[1]:
+        if start[0] == end[0]: # across
+            if temp_grid[x][y] == " " or temp_grid[x][y] == word[y - start[1]]:
+                temp_grid[x][y] = word[y - start[1]]
+                y += 1
+            else:
+                return # Cannot insert
+        elif start[1] == end[1]: # down
+            if temp_grid[x][y] == " " or temp_grid[x][y] == word[x - start[0]]:
+                temp_grid[x][y] = word[x - start[0]]
+                x += 1
+            else:
+                return # Cannot insert
+    return temp_grid
 
 def get_clue_lengths(grid, grid_numbers, clues, direction):
     clue_lengths = {}
@@ -75,7 +166,6 @@ def end_position(grid, start_position, direction):
     if direction == "across":
         while y < 4 and grid[x][y + 1] != 1:
             y += 1
-        
     elif direction == "down":
         while x < 4 and grid[x + 1][y] != 1:
             x += 1
