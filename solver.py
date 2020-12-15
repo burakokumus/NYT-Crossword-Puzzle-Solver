@@ -38,12 +38,25 @@ def solve(  grid, across, down, grid_numbers):
                 [' ', ' ', ' ', ' ', ' '], 
                 [' ', ' ', ' ', ' ', ' '], 
     ]
-    clue = "Bashful"
-    clue_way = "down"
-    clue_no = 2
-    print(start_and_end(grid, grid_numbers, clue_no, clue_way))
+    across_clue_lengths = get_clue_lengths(grid, grid_numbers, across, "across")
+    down_clue_lengths = get_clue_lengths(grid, grid_numbers, down, "down")
+
+    print(across_clue_lengths)
+    print(down_clue_lengths)
 
     return answer
+
+def get_clue_lengths(grid, grid_numbers, clues, direction):
+    clue_lengths = {}
+    for clue in clues:
+        start, end = start_and_end(grid, grid_numbers, int(clue[0]), direction)
+        length = 0
+        if direction == "down":
+            length = end[0] - start[0] + 1
+        elif direction == "across":
+            length = end[1] - start[1] + 1
+        clue_lengths[clue[0]] = length
+    return clue_lengths
 
 def start_and_end(grid, grid_numbers, clue_no, direction):
     starting_pos = start_position(grid_numbers, clue_no)
@@ -60,10 +73,11 @@ def end_position(grid, start_position, direction):
     x = start_position[0]
     y = start_position[1]
     if direction == "across":
-        while y < 5 and grid[x][y + 1] != 1:
+        while y < 4 and grid[x][y + 1] != 1:
             y += 1
+        
     elif direction == "down":
-        while x < 5 and grid[x + 1][y] != 1:
+        while x < 4 and grid[x + 1][y] != 1:
             x += 1
     return (x, y)    
 
