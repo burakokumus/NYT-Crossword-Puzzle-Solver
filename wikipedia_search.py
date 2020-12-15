@@ -23,7 +23,7 @@ def wikipedia_search(input_string):
 
     nonstop_words = word_eliminator.eliminate_stop_words(nonnumber_words)
 
-    lower_case = word_eliminator.to_lower_case(nonstop_words)
+    lower_case = word_eliminator.to_upper_case(nonstop_words)
     
     return lower_case
 

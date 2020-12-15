@@ -3,7 +3,7 @@ import json
 from bs4 import BeautifulSoup
 from googleapiclient.discovery import build   #Import the library
 import re
-from solver import process_list
+import word_eliminator
 
 
 
@@ -56,8 +56,20 @@ def google_query(query, api_key, cse_id, **kwargs):
                 result_words.append(x)
             for x in snippet:
                 result_words.append(x)
-    
-    return process_list(result_words)
+
+            unique_words = word_eliminator.eliminate_duplicates(result_words)
+
+            words_without_punc = word_eliminator.eliminate_punctuation(unique_words)
+            
+            short_words = word_eliminator.eliminate_long_words(words_without_punc)
+
+            nonnumber_words = word_eliminator.eliminate_numbers(short_words)
+
+            nonstop_words = word_eliminator.eliminate_stop_words(nonnumber_words)
+
+            result_words = word_eliminator.to_upper_case(nonstop_words)
+
+    return result_words
     
 
 

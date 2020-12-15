@@ -20,5 +20,5 @@ def eliminate_numbers(word_list):
 def eliminate_stop_words(word_list):
     return [word for word in word_list if word not in stopwords.words('english')]
 
-def to_lower_case(word_list):
-    return [x.lower() for x in word_list]
+def to_upper_case(word_list):
+    return [x.upper() for x in word_list]
