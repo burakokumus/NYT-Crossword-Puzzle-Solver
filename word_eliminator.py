@@ -23,13 +23,27 @@ def eliminate_stop_words(word_list):
 def to_upper_case(word_list):
     return [x.upper() for x in word_list]
 
+def remove_escape_sequences(input_str):
+    query = input_str.split(" ")
+    words_without_escape = ""
+    for word in query:
+        filtered = filter(str.isalpha, word)
+        words_without_escape += "".join(filtered) + " "
+    return words_without_escape
+
 def filter_words(word_list, word_length):
-    words_with_upper_case = to_upper_case(word_list)
+    words_without_escape = []
+    for word in word_list:
+        filtered = filter(str.isalpha, word)
+        words_without_escape.append("".join(filtered))
+
+    words_with_upper_case = to_upper_case(words_without_escape)
     unique_words = eliminate_duplicates(words_with_upper_case)
     words_without_punc = eliminate_punctuation(unique_words)
     words_with_correct_length = eliminate_long_or_short_words(words_without_punc, word_length)
     words_without_number = eliminate_numbers(words_with_correct_length)
     words_without_stop_words = eliminate_stop_words(words_without_number)
     result = eliminate_duplicates(words_without_stop_words)
+
 
     return result

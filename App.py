@@ -40,6 +40,7 @@ class App(QMainWindow):
                 "grid_numbers": grid_numbers,
                 "answer": answer
             }
+            
             our_answer = solve(grid, across, down, grid_numbers)
             self.central_widget = MainWidget(official_sol, our_answer, trace_mod=trace_mod)
         
@@ -48,7 +49,8 @@ class App(QMainWindow):
             json_file = open("./PuzzleDatabases/" + custom_file + ".json", 'r')
             data = json.load(json_file)
             date = data["date"]
-            self.central_widget = MainWidget(data, date=date)
+            our_answer = solve(data["grid"], data["across"], data["down"], data["grid_numbers"])
+            self.central_widget = MainWidget(data, our_answer, date=date)
 
         self.setCentralWidget(self.central_widget)
         self.setWindowTitle("PROMINI NYT Mini CrossWord Solver")

@@ -7,7 +7,7 @@ import word_eliminator
 
 
 
-credentials_file = open('credentials.json', "r")
+credentials_file = open('credentials5.json', "r")
 credentials_data = json.load(credentials_file)
 
 api_key = credentials_data["api_key"]
@@ -41,7 +41,27 @@ def google_query(query, length, api_key, cse_id, **kwargs):
     site_count = 0
     for a_result in query_results['items']:
         if a_result["displayLink"] not in FORBIDDEN_SITES and "crossword" not in a_result["displayLink"]:
-            print(a_result["displayLink"])
+            snippet = remove_html_tags(a_result["snippet"])
+            html_snippet = remove_html_tags(a_result["htmlSnippet"])
+            snippet = snippet.split(" ")
+            html_snippet = html_snippet.split(" ")
+            # remove punctuations, long words
+            for x in html_snippet:
+                filtered = filter(str.isalpha, x)
+                result_words.append("".join(filtered))
+            for x in snippet:
+                filtered = filter(str.isalpha, x)
+                result_words.append("".join(filtered))
+            site_count += 1
+    
+    next_response = query_service.cse().list(
+                                q=query,cx=cse_id,num=10,start=query_results['queries']['nextPage'][0]['startIndex'],).execute() 
+    print
+    if query == "\"Oh, you wanna go? Let's go!\"":
+        f = open("results.txt", "w")
+        f.write(next_response)
+    for a_result in next_response['items']:
+        if a_result["displayLink"] not in FORBIDDEN_SITES and "crossword" not in a_result["displayLink"]:
             snippet = remove_html_tags(a_result["snippet"])
             html_snippet = remove_html_tags(a_result["htmlSnippet"])
             snippet = snippet.split(" ")
@@ -52,39 +72,15 @@ def google_query(query, length, api_key, cse_id, **kwargs):
             for x in snippet:
                 result_words.append(x)
             site_count += 1
-    
-    while site_count < 20:
-        next_response = query_service.cse().list(
-                                        q=query,cx=cse_id,num=10,start=query_results['queries']['nextPage'][0]['startIndex'],).execute() 
-
-        for a_result in next_response['items']:
-            if a_result["displayLink"] not in FORBIDDEN_SITES and "crossword" not in a_result["displayLink"]:
-                print(a_result["displayLink"])
-                snippet = remove_html_tags(a_result["snippet"])
-                html_snippet = remove_html_tags(a_result["htmlSnippet"])
-                snippet = snippet.split(" ")
-                html_snippet = html_snippet.split(" ")
-                # remove punctuations, long words
-                for x in html_snippet:
-                    result_words.append(x)
-                for x in snippet:
-                    result_words.append(x)
-                site_count += 1
 
     return word_eliminator.filter_words(result_words, length)
     
 def search_google(query, length):
-    google_query(query, length, api_key, cse_id)
+    return google_query(query, length, api_key, cse_id, num=10)
 
-if __name__ == '__main__':
+if __name__ == '__main__': 
     my_results_list = []
-    my_results = google_query("greek k",
-                                5,
-                            api_key, 
-                            cse_id, 
-                            num = 10
-                            )
-
+    my_results = search_google("Oh, you wanna go? Let's go!", 5)
     print(my_results)
         
     
