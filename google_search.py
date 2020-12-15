@@ -15,13 +15,6 @@ cse_id = credentials_data["cse_id"]
 
 FORBIDDEN_SITES = [
     "www.wordplays.com",
-    "www.crosswordsolver.org",
-    "www.the-crossword-solver.com",
-    "crossword-solver.io",
-    "www.crosswordsolver.com",
-    "crossword-solver.org",
-    "crosswordmonkey.com",
-    "www.crosswordclues.com",
     "www.wordfun.ca",
     "chambers.co.uk/puzzles/word-wizard",
     "www.realqunb.com",
@@ -35,7 +28,7 @@ def remove_html_tags(text):
     ''' Remove html tags from the input '''
     return TAG_RE.sub('', text)
     
-def google_query(query, api_key, cse_id, **kwargs):
+def google_query(query, length, api_key, cse_id, **kwargs):
     query_service = build("customsearch", 
                         "v1", 
                         developerKey=api_key
@@ -45,8 +38,10 @@ def google_query(query, api_key, cse_id, **kwargs):
                                             **kwargs    
                                             ).execute()
     result_words = []
+    site_count = 0
     for a_result in query_results['items']:
-        if a_result["displayLink"] not in FORBIDDEN_SITES:
+        if a_result["displayLink"] not in FORBIDDEN_SITES and "crossword" not in a_result["displayLink"]:
+            print(a_result["displayLink"])
             snippet = remove_html_tags(a_result["snippet"])
             html_snippet = remove_html_tags(a_result["htmlSnippet"])
             snippet = snippet.split(" ")
@@ -56,31 +51,40 @@ def google_query(query, api_key, cse_id, **kwargs):
                 result_words.append(x)
             for x in snippet:
                 result_words.append(x)
-
-            unique_words = word_eliminator.eliminate_duplicates(result_words)
-
-            words_without_punc = word_eliminator.eliminate_punctuation(unique_words)
-            
-            short_words = word_eliminator.eliminate_long_words(words_without_punc)
-
-            nonnumber_words = word_eliminator.eliminate_numbers(short_words)
-
-            nonstop_words = word_eliminator.eliminate_stop_words(nonnumber_words)
-
-            result_words = word_eliminator.to_upper_case(nonstop_words)
-
-    return result_words
+            site_count += 1
     
+    while site_count < 20:
+        next_response = query_service.cse().list(
+                                        q=query,cx=cse_id,num=10,start=query_results['queries']['nextPage'][0]['startIndex'],).execute() 
 
+        for a_result in next_response['items']:
+            if a_result["displayLink"] not in FORBIDDEN_SITES and "crossword" not in a_result["displayLink"]:
+                print(a_result["displayLink"])
+                snippet = remove_html_tags(a_result["snippet"])
+                html_snippet = remove_html_tags(a_result["htmlSnippet"])
+                snippet = snippet.split(" ")
+                html_snippet = html_snippet.split(" ")
+                # remove punctuations, long words
+                for x in html_snippet:
+                    result_words.append(x)
+                for x in snippet:
+                    result_words.append(x)
+                site_count += 1
+
+    return word_eliminator.filter_words(result_words, length)
+    
+def search_google(query, length):
+    google_query(query, length, api_key, cse_id)
 
 if __name__ == '__main__':
     my_results_list = []
-    my_results = google_query("logitech mouse",
+    my_results = google_query("greek k",
+                                5,
                             api_key, 
                             cse_id, 
                             num = 10
                             )
-    f = open("result.json", "w")
+
     print(my_results)
         
     
