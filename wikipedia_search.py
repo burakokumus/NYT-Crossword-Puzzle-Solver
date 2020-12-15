@@ -6,51 +6,13 @@ import datetime
 import string
 import word_eliminator
 
-def wikipedia_search(input_string):
+def wikipedia_search(input_string, word_length):
     list = wikipedia.search(input_string)
     
     page_content = wikipedia.page(list[0] + '.').content
     
     all_words = page_content.split(' ')
 
-    unique_words = word_eliminator.eliminate_duplicates(all_words)
-
-    words_without_punc = word_eliminator.eliminate_punctuation(unique_words)
+    filtered_words = word_eliminator.filter_words(all_words, word_length)
     
-    short_words = word_eliminator.eliminate_long_words(words_without_punc)
-
-    nonnumber_words = word_eliminator.eliminate_numbers(short_words)
-
-    nonstop_words = word_eliminator.eliminate_stop_words(nonnumber_words)
-
-    lower_case = word_eliminator.to_upper_case(nonstop_words)
-    
-    return lower_case
-
-if __name__ == "__main__":
-    start_time = datetime.datetime.now()
-    words = wikipedia_search("Barrack Obama")
-    print(words)
-    print("Found {} words".format(len(words)))
-    end_time = datetime.datetime.now()
-    time_diff = (end_time - start_time)
-    execution_time = time_diff.total_seconds()
-    print("Exec time: {}".format(execution_time))
-    pass
-
-
-
-
-
-
-'''
-# Plan B
-# start from <li class='mw-search-result'><div class='mw-search-result-heading'><a href=" end at "
-word = "yo+yo+ma"
-str = "https://en.wikipedia.org/w/index.php?search=" + word + "&title=Special:Search&profile=advanced&fulltext=1&advancedSearch-current=%7B%7D&ns0=1"
-r = requests.get(str)
-f = open("page.txt", "w", encoding="utf-8")
-f.write(r.text)
-f.close()
-quit()
-'''
+    return filtered_words
