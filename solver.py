@@ -4,7 +4,12 @@ import wikipedia_search
 import word_eliminator
 import datamuse
 
-
+'''
+Solve takes information about grid and clues
+Utilizes google, wikipedia and wordnet to find candidates to clues
+Recursively inserts answers using depth-first approach
+Returns solution with maximum filled squares
+'''
 def solve(  grid, across, down, grid_numbers, trace_mod=False):
     answer = [
                 [' ', ' ', ' ', ' ', ' '],
@@ -20,14 +25,15 @@ def solve(  grid, across, down, grid_numbers, trace_mod=False):
     if trace_mod:
         print("Finding candidate list for across clues")
     across_candidate_lists = find_candidate_lists(across, across_clue_lengths, trace_mod)
-    
+    # across_blacklist = [i for i, clue in enumerate(across) if across[i][1][-1] == "?"]
     if trace_mod:
         print("Finding candidate list for down clues")
     down_candidate_lists = find_candidate_lists(down, down_clue_lengths, trace_mod)
+    # down_blacklist = [i for i, clue in enumerate(down) if down[i][1][-1] == "?"]
 
     if trace_mod:
         print("Trying to fit candidates for clues")
-    results = rec_insert(grid, grid_numbers, answer, across_candidate_lists, down_candidate_lists, True)
+    results = rec_insert(grid, grid_numbers, answer, across_candidate_lists, down_candidate_lists, False)
 
     if trace_mod:
         print("Finding answers with least empty cells")
@@ -41,16 +47,21 @@ def solve(  grid, across, down, grid_numbers, trace_mod=False):
     for result in results:
         if empty_tile_number(grid, result) == min_empty:
             best_results.append(result)
-            print("This is a best result")
+            print("This is an alternative best result")
             count += 1
             for row in result:
                 print(row)
             print("------")
-    print("Count is", count)
     if trace_mod:
         print("Answer found. Reporting...")
+    if len(best_results) == 0:
+        print(len(results), "answers found")
+        return answer
     return best_results[0]
 
+'''
+Find and return candidate list for a set of clues
+'''
 def find_candidate_lists(clues, clue_lengths, trace_mod):
     candidate_lists = []
     for clue in clues:
@@ -58,33 +69,37 @@ def find_candidate_lists(clues, clue_lengths, trace_mod):
         candidate_lists.append( (clue[0], candidate_list) )
     return candidate_lists
 
+'''
+Find candidates for a single clue with given length
+Use google, wikipedia and wordnet
+'''
 def find_candidates(clue, length, trace_mod=False):
     if trace_mod:
         print("Finding possible candidates for the clue", clue)
-    candidates_list = []
     # search clue
     filtered_clue = word_eliminator.remove_escape_sequences(clue)
     if trace_mod:
         print("Searching google")
     google_results = google_search.search_google(filtered_clue, length)
-    if len(google_results) > 50:
-        google_results = google_results[:50]
-    candidates_list.extend(google_results)
+    if len(google_results) > 100:
+        google_results = google_results[:100]
     if trace_mod:
         print("Searching wikipedia")
     wikipedia_results = wikipedia_search.wikipedia_search(filtered_clue, length)
-    if len(wikipedia_results) > 50:
-        wikipedia_results = wikipedia_results[:50]
-    candidates_list.extend(wikipedia_results)
+    if len(wikipedia_results) > 100:
+        wikipedia_results = wikipedia_results[:100]
     if trace_mod:
         print("Searching wordnet")
     datamuse_results = datamuse.get_words_with_similar_meaning(clue, length)
-    if len(datamuse_results) > 50:
-        datamuse_results = datamuse_results[:50]
-    candidates_list.extend(datamuse_results)
+    candidates_list = word_eliminator.stratified_merge(datamuse_results, google_results, wikipedia_results)
     candidates_list = word_eliminator.eliminate_duplicates(candidates_list)
+    # print(candidates_list)
+    # input()
     return candidates_list
 
+'''
+Find and return number of empty squares given grid geometry and filled squares
+'''
 def empty_tile_number(grid, current_grid):
     empty_no = 0
     for x, row in enumerate(grid):
@@ -93,6 +108,10 @@ def empty_tile_number(grid, current_grid):
                 empty_no += 1
     return empty_no
 
+'''
+Recursively insert given candidates using constraint satisfaction
+Turn represents input direction (true => across, false => down)
+'''
 def rec_insert(grid, grid_numbers, current_grid, acro_cand_list, down_cand_list, turn):
     across_count = len(acro_cand_list) 
     down_count = len(down_cand_list)
@@ -116,7 +135,7 @@ def rec_insert(grid, grid_numbers, current_grid, acro_cand_list, down_cand_list,
         cand_list = next_across_tup[1]
         start, end = start_and_end(grid, grid_numbers, int(clue_no), "across")
         possible_branches = []
-        if across_count < 4 and across_count > 1:
+        if across_count in [3, 1] or len(cand_list) == 0:
             possible_branches = [ [row[:] for row in current_grid]]
         for candidate in cand_list:
             inserted = insert_to_grid(current_grid, start, end, candidate)
@@ -134,7 +153,7 @@ def rec_insert(grid, grid_numbers, current_grid, acro_cand_list, down_cand_list,
         cand_list = next_down_tup[1]
         start, end = start_and_end(grid, grid_numbers, int(clue_no), "down")
         possible_branches = []
-        if down_count < 4 and down_count > 1:
+        if down_count < 0 or len(cand_list) == 0:
             possible_branches = [ [row[:] for row in current_grid] ]
         for candidate in cand_list:
             inserted = insert_to_grid(current_grid, start, end, candidate)
@@ -148,6 +167,10 @@ def rec_insert(grid, grid_numbers, current_grid, acro_cand_list, down_cand_list,
 
     return possible_outcomes
 
+'''
+Insert a single word onto a given position
+Return resulting grid if insert is succesful, None otherwise
+'''
 def insert_to_grid(current_grid, start, end, word):
     temp_grid = [row[:] for row in current_grid]
     x = start[0]
@@ -167,6 +190,10 @@ def insert_to_grid(current_grid, start, end, word):
                 return # Cannot insert
     return temp_grid
 
+'''
+Find and return clue lengths as a dictionary
+Uses grid geometry and grid numbers information to determine length
+'''
 def get_clue_lengths(grid, grid_numbers, clues, direction):
     clue_lengths = {}
     for clue in clues:
@@ -179,6 +206,9 @@ def get_clue_lengths(grid, grid_numbers, clues, direction):
         clue_lengths[clue[0]] = length
     return clue_lengths
 
+'''
+Find starting and ending position of a word in puzzle given clue no
+'''
 def start_and_end(grid, grid_numbers, clue_no, direction):
     starting_pos = start_position(grid_numbers, clue_no)
     ending_pos = end_position(grid, starting_pos, direction) 
@@ -201,6 +231,9 @@ def end_position(grid, start_pos, direction):
             x += 1
     return (x, y)    
 
+'''
+Append target element to append_to list only if it is not already in the list 
+'''
 def append_unique(append_to, target):
     if target not in append_to:
         append_to.append(target)

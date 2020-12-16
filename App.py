@@ -49,7 +49,7 @@ class App(QMainWindow):
             json_file = open("./PuzzleDatabases/" + custom_file + ".json", 'r')
             data = json.load(json_file)
             date = data["date"]
-            our_answer = solve(data["grid"], data["across"], data["down"], data["grid_numbers"], trace_mod=trace_mod)
+            our_answer = solve(data["grid"], data["across"], data["down"], data["grid_numbers"], trace_mod)
             self.central_widget = MainWidget(data, our_answer, date=date)
 
         self.setCentralWidget(self.central_widget)

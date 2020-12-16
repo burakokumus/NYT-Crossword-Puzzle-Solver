@@ -1,13 +1,12 @@
-import requests
 import json
 from bs4 import BeautifulSoup
-from googleapiclient.discovery import build   #Import the library
+from googleapiclient.discovery import build 
 import re
 import word_eliminator
 
 
 
-credentials_file = open('credentials5.json', "r")
+credentials_file = open('./GoogleCredentials/credentials7.json', "r")
 credentials_data = json.load(credentials_file)
 
 api_key = credentials_data["api_key"]
@@ -77,10 +76,5 @@ def google_query(query, length, api_key, cse_id, **kwargs):
     
 def search_google(query, length):
     return google_query(query, length, api_key, cse_id, num=10)
-
-if __name__ == '__main__': 
-    my_results_list = []
-    my_results = search_google("Oh, you wanna go? Let's go!", 5)
-    print(my_results)
         
     

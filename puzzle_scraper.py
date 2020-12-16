@@ -21,7 +21,7 @@ class PuzzleScraper:
         self.trace_mod = trace_mod
         self.option = webdriver.ChromeOptions()
         self.option.add_argument('--log-level=3')
-        self.driver = webdriver.Chrome("./chromedriver", options=self.option)
+        self.driver = webdriver.Chrome("./Resources/chromedriver", options=self.option)
         self.driver.get("https://www.nytimes.com/crosswords/game/mini")
         self.driver.maximize_window()
         self.driver.execute_script("window.scrollTo(0, 300)") 

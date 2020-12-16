@@ -11,8 +11,41 @@ USER_DEFINED=[
 def has_numbers(input_string):
     return any(char.isdigit() for char in input_string)
 
+def stratified_merge(list_a, list_b, list_c):
+    lena = len(list_a)
+    lenb = len(list_b)
+    lenc = len(list_c)
+
+    stratified = []
+    while len(list_a) > 0 and len(list_b) > 0 and len(list_c) > 0:
+        if len(list_a) > lena // 10:
+            stratified.extend( list_a[:lena // 10])
+            list_a = list_a[lena // 10:]
+        else:
+            stratified.extend(list_a)
+            list_a = []
+
+        if len(list_b) > lenb // 10:
+            stratified.extend( list_b[:lenb // 10])
+            list_b = list_b[lenb // 10:]
+        else:
+            stratified.extend(list_b)
+            list_b = []
+
+        if len(list_c) > lenc // 10:
+            stratified.extend( list_c[:lenc // 10])
+            list_c = list_c[lenc // 10:]
+        else:
+            stratified.extend(list_c)
+            list_c = []
+
+    return stratified
+
 def eliminate_duplicates(word_list):
-    return list(set(word_list))
+    duplicates = [x for x in word_list if word_list.count(x) > 1]
+    eliminated_list = [x for x in word_list if word_list.count(x) == 1]
+    duplicates = [i for j, i in enumerate(duplicates) if i not in duplicates[:j]] 
+    return duplicates + eliminated_list
 
 def eliminate_user_defined(word_list):
     return [word for word in word_list if word not in USER_DEFINED]
