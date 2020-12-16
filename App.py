@@ -41,7 +41,7 @@ class App(QMainWindow):
                 "answer": answer
             }
             
-            our_answer = solve(grid, across, down, grid_numbers)
+            our_answer = solve(grid, across, down, grid_numbers, trace_mod=trace_mod)
             self.central_widget = MainWidget(official_sol, our_answer, trace_mod=trace_mod)
         
         # Use data from given .json file in PuzzleDatabases folder
@@ -49,7 +49,7 @@ class App(QMainWindow):
             json_file = open("./PuzzleDatabases/" + custom_file + ".json", 'r')
             data = json.load(json_file)
             date = data["date"]
-            our_answer = solve(data["grid"], data["across"], data["down"], data["grid_numbers"])
+            our_answer = solve(data["grid"], data["across"], data["down"], data["grid_numbers"], trace_mod=trace_mod)
             self.central_widget = MainWidget(data, our_answer, date=date)
 
         self.setCentralWidget(self.central_widget)
@@ -173,7 +173,7 @@ class MainWidget(QWidget):
 def main():
     trace_mod = input("Do you want single stepping? (y/n):") in ["y", "Y", "yes", "Yes"]
     app = QApplication(sys.argv)
-    window = App(trace_mod=trace_mod)
+    window = App(trace_mod=trace_mod, custom_file="November_11")
     window.show()
     app.exec_()
 

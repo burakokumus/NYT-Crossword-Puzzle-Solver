@@ -9,7 +9,10 @@ import word_eliminator
 def wikipedia_search(input_string, word_length):
     try:
         list = wikipedia.search(input_string)
-        page_content = wikipedia.page(list[0] + '.').content
+        if len(list) > 0:
+            page_content = wikipedia.page(list[0] + '.').content
+        else:
+            return []
     except wikipedia.exceptions.DisambiguationError as e:
         return wikipedia_search(e.options[0], word_length)
     

@@ -2,11 +2,20 @@ import string
 import nltk
 from nltk.corpus import stopwords
 
+USER_DEFINED=[
+    "ANBSP",
+    "NBSP"
+
+]
+
 def has_numbers(input_string):
     return any(char.isdigit() for char in input_string)
 
 def eliminate_duplicates(word_list):
     return list(set(word_list))
+
+def eliminate_user_defined(word_list):
+    return [word for word in word_list if word not in USER_DEFINED]
 
 def eliminate_punctuation(word_list):
     return [s.translate(str.maketrans('', '', string.punctuation)) for s in word_list]
@@ -38,7 +47,8 @@ def filter_words(word_list, word_length):
         words_without_escape.append("".join(filtered))
 
     words_with_upper_case = to_upper_case(words_without_escape)
-    unique_words = eliminate_duplicates(words_with_upper_case)
+    words_without_user_defined = eliminate_user_defined(words_with_upper_case)
+    unique_words = eliminate_duplicates(words_without_user_defined)
     words_without_punc = eliminate_punctuation(unique_words)
     words_with_correct_length = eliminate_long_or_short_words(words_without_punc, word_length)
     words_without_number = eliminate_numbers(words_with_correct_length)
