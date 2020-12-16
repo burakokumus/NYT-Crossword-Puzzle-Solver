@@ -19,5 +19,3 @@ def wikipedia_search(input_string, word_length):
     filtered_words = word_eliminator.filter_words(all_words, word_length)
     
     return filtered_words
-
-print(wikipedia_search("bashful", 3))
