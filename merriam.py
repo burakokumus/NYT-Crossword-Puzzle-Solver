@@ -55,17 +55,3 @@ def get_dictionary_result(word):
             for definition in result["shortdef"]:
                 definitions.append(definition)
     return definitions
-
-if __name__ == '__main__':
-    word = input("Enter a word\n").lower()
-    choice = int(input("Which one do you need?\n1. Dictionary\n2. Antonyms\n3. Synonyms\n"))
-    if choice == 1:
-        print(get_dictionary_result(word))
-    elif choice == 2 or choice == 3:
-        ants, syns = get_ants_and_syns(word)
-        if choice == 2:
-            print(ants)
-        elif choice == 3:
-            print(syns)
-    else:
-        print("Wrong input")

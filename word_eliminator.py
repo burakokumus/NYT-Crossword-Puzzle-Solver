@@ -17,7 +17,7 @@ def stratified_merge(list_a, list_b, list_c):
     lenc = len(list_c)
 
     stratified = []
-    while len(list_a) > 0 and len(list_b) > 0 and len(list_c) > 0:
+    while len(list_a) > 0 or len(list_b) > 0 or len(list_c) > 0:
         if len(list_a) > lena // 10:
             stratified.extend( list_a[:lena // 10])
             list_a = list_a[lena // 10:]
@@ -87,6 +87,5 @@ def filter_words(word_list, word_length):
     words_without_number = eliminate_numbers(words_with_correct_length)
     words_without_stop_words = eliminate_stop_words(words_without_number)
     result = eliminate_duplicates(words_without_stop_words)
-
 
     return result

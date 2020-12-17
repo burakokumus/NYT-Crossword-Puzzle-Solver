@@ -14,6 +14,7 @@ def get_data(query, length):
 # word
 def get_words_with_similar_meaning(input_word, length):
     input_word = input_word.lower()
+    input_word = input_word.replace("-", "+")
     input_word = input_word.replace(" ", "+")
     query = "/words?ml=" + input_word
     return get_data(query, length)

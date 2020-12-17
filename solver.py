@@ -47,11 +47,12 @@ def solve(  grid, across, down, grid_numbers, trace_mod=False):
     for result in results:
         if empty_tile_number(grid, result) == min_empty:
             best_results.append(result)
-            print("This is an alternative best result")
             count += 1
-            for row in result:
-                print(row)
-            print("------")
+            if trace_mod:
+                print("This is an alternative best result")
+                for row in result:
+                    print(row)
+                print("------")
     if trace_mod:
         print("Answer found. Reporting...")
     if len(best_results) == 0:
@@ -67,6 +68,9 @@ def find_candidate_lists(clues, clue_lengths, trace_mod):
     for clue in clues:
         candidate_list = find_candidates(clue[1], clue_lengths[str(clue[0])], trace_mod)
         candidate_lists.append( (clue[0], candidate_list) )
+        if trace_mod:
+            print("Candidates for", clue)
+            print(candidate_list)
     return candidate_lists
 
 '''
@@ -78,6 +82,8 @@ def find_candidates(clue, length, trace_mod=False):
         print("Finding possible candidates for the clue", clue)
     # search clue
     filtered_clue = word_eliminator.remove_escape_sequences(clue)
+    filtered_clue = word_eliminator.eliminate_punctuation(filtered_clue.split(" "))
+    filtered_clue = ' '.join(filtered_clue)
     if trace_mod:
         print("Searching google")
     google_results = google_search.search_google(filtered_clue, length)
@@ -93,8 +99,6 @@ def find_candidates(clue, length, trace_mod=False):
     datamuse_results = datamuse.get_words_with_similar_meaning(clue, length)
     candidates_list = word_eliminator.stratified_merge(datamuse_results, google_results, wikipedia_results)
     candidates_list = word_eliminator.eliminate_duplicates(candidates_list)
-    # print(candidates_list)
-    # input()
     return candidates_list
 
 '''
@@ -135,7 +139,7 @@ def rec_insert(grid, grid_numbers, current_grid, acro_cand_list, down_cand_list,
         cand_list = next_across_tup[1]
         start, end = start_and_end(grid, grid_numbers, int(clue_no), "across")
         possible_branches = []
-        if across_count in [3, 1] or len(cand_list) == 0:
+        if  len(cand_list) == 0:
             possible_branches = [ [row[:] for row in current_grid]]
         for candidate in cand_list:
             inserted = insert_to_grid(current_grid, start, end, candidate)
@@ -153,7 +157,7 @@ def rec_insert(grid, grid_numbers, current_grid, acro_cand_list, down_cand_list,
         cand_list = next_down_tup[1]
         start, end = start_and_end(grid, grid_numbers, int(clue_no), "down")
         possible_branches = []
-        if down_count < 0 or len(cand_list) == 0:
+        if  down_count == 2 or len(cand_list) == 0:
             possible_branches = [ [row[:] for row in current_grid] ]
         for candidate in cand_list:
             inserted = insert_to_grid(current_grid, start, end, candidate)

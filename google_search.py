@@ -6,7 +6,7 @@ import word_eliminator
 
 
 
-credentials_file = open('./GoogleCredentials/credentials7.json', "r")
+credentials_file = open('./GoogleCredentials/credentials15.json', "r")
 credentials_data = json.load(credentials_file)
 
 api_key = credentials_data["api_key"]
@@ -17,7 +17,15 @@ FORBIDDEN_SITES = [
     "www.wordfun.ca",
     "chambers.co.uk/puzzles/word-wizard",
     "www.realqunb.com",
-    "puzzlepageanswers.org"
+    "puzzlepageanswers.org",
+    "www.danword.com",
+    "ultimatesuccesspuzzle.com",
+    "www.cluest.net",
+    "nytimesanswers.com",
+    "jumbleanswers.com",
+    "unscramblex.com",
+    "www.word-grabber.com",
+    "www.globalclue.com"
 ]
 
 TAG_RE = re.compile(r'<[^>]+>')
@@ -39,7 +47,7 @@ def google_query(query, length, api_key, cse_id, **kwargs):
     result_words = []
     site_count = 0
     for a_result in query_results['items']:
-        if a_result["displayLink"] not in FORBIDDEN_SITES and "crossword" not in a_result["displayLink"]:
+        if a_result["displayLink"] not in FORBIDDEN_SITES and "crossword" not in a_result["displayLink"] and "puzzle" not in a_result["displayLink"]:
             snippet = remove_html_tags(a_result["snippet"])
             html_snippet = remove_html_tags(a_result["htmlSnippet"])
             snippet = snippet.split(" ")
@@ -52,6 +60,7 @@ def google_query(query, length, api_key, cse_id, **kwargs):
                 filtered = filter(str.isalpha, x)
                 result_words.append("".join(filtered))
             site_count += 1
+            
     
     next_response = query_service.cse().list(
                                 q=query,cx=cse_id,num=10,start=query_results['queries']['nextPage'][0]['startIndex'],).execute() 
@@ -67,14 +76,14 @@ def google_query(query, length, api_key, cse_id, **kwargs):
             html_snippet = html_snippet.split(" ")
             # remove punctuations, long words
             for x in html_snippet:
-                result_words.append(x)
+                filtered = filter(str.isalpha, x)
+                result_words.append("".join(filtered))
             for x in snippet:
-                result_words.append(x)
+                filtered = filter(str.isalpha, x)
+                result_words.append("".join(filtered))
             site_count += 1
 
     return word_eliminator.filter_words(result_words, length)
     
 def search_google(query, length):
     return google_query(query, length, api_key, cse_id, num=10)
-        
-    
