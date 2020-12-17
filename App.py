@@ -1,5 +1,6 @@
 import json
 import sys
+import time
 from puzzle_scraper import PuzzleScraper
 from solver import solve
 from Body import Body 
@@ -32,6 +33,7 @@ class App(QMainWindow):
             grid_numbers = ps.get_grid_numbers()
             ps.reveal_puzzle()
             answer = ps.extract_answers()
+            time.sleep(3.5)
             ps.close_driver()
             official_sol = {
                 "grid": grid,
@@ -173,7 +175,7 @@ class MainWidget(QWidget):
 def main():
     trace_mod = input("Do you want single stepping? (y/n):") in ["y", "Y", "yes", "Yes"]
     app = QApplication(sys.argv)
-    window = App(trace_mod=trace_mod, custom_file="November_11")
+    window = App(trace_mod=trace_mod)
     window.show()
     app.exec_()
 
