@@ -1,6 +1,8 @@
 import json
 import sys
+import time
 from puzzle_scraper import PuzzleScraper
+from solver import solve
 from Body import Body 
 from PyQt5.QtCore import QDate, QSize, QTime, QTimer, Qt
 from PyQt5.QtGui import QFont, QFontDatabase, QIcon
@@ -31,6 +33,7 @@ class App(QMainWindow):
             grid_numbers = ps.get_grid_numbers()
             ps.reveal_puzzle()
             answer = ps.extract_answers()
+            time.sleep(3.5)
             ps.close_driver()
             official_sol = {
                 "grid": grid,
@@ -39,14 +42,17 @@ class App(QMainWindow):
                 "grid_numbers": grid_numbers,
                 "answer": answer
             }
-            self.central_widget = MainWidget(official_sol, trace_mod=trace_mod)
+            
+            our_answer = solve(grid, across, down, grid_numbers, trace_mod=trace_mod)
+            self.central_widget = MainWidget(official_sol, our_answer, trace_mod=trace_mod)
         
         # Use data from given .json file in PuzzleDatabases folder
         else:
             json_file = open("./PuzzleDatabases/" + custom_file + ".json", 'r')
             data = json.load(json_file)
             date = data["date"]
-            self.central_widget = MainWidget(data, date=date)
+            our_answer = solve(data["grid"], data["across"], data["down"], data["grid_numbers"], trace_mod)
+            self.central_widget = MainWidget(data, our_answer, date=date)
 
         self.setCentralWidget(self.central_widget)
         self.setWindowTitle("PROMINI NYT Mini CrossWord Solver")
@@ -73,7 +79,7 @@ Body is imported from another class
 Footer includes current time, date and group name
 '''
 class MainWidget(QWidget):
-    def __init__(self, official_sol, date = None, trace_mod=False):
+    def __init__(self, official_sol, our_answer, date = None, trace_mod=False):
         super().__init__()  
         now = QDate.currentDate() 
         # Set date to current date if not specified
@@ -85,6 +91,7 @@ class MainWidget(QWidget):
         self.answer = official_sol["answer"]
         self.across = official_sol["across"]
         self.down = official_sol["down"]
+        self.our_answer = our_answer
         self.trace_mod = trace_mod
         self.initUI()  
 
@@ -123,7 +130,7 @@ class MainWidget(QWidget):
         # Body (or middle part)
         self.body = QHBoxLayout()
         self.body.setSpacing(10)
-        self.body.addWidget(Body(self.grid, self.grid_numbers, self.answer, self.across, self.down, parent=self, trace_mod=self.trace_mod))
+        self.body.addWidget(Body(self.grid, self.grid_numbers, self.answer, self.across, self.down, self.our_answer, parent=self, trace_mod=self.trace_mod))
 
         # Footer
         self.footer = QHBoxLayout()
