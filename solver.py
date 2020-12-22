@@ -144,6 +144,8 @@ def rec_insert(grid, grid_numbers, current_grid, acro_cand_list, down_cand_list,
         for candidate in cand_list:
             inserted = insert_to_grid(current_grid, start, end, candidate)
             if inserted is not None:
+                if empty_tile_number(grid, inserted) == 0:
+                    return [inserted]
                 append_unique(possible_branches, inserted)
         
         for branch in possible_branches:
@@ -157,11 +159,13 @@ def rec_insert(grid, grid_numbers, current_grid, acro_cand_list, down_cand_list,
         cand_list = next_down_tup[1]
         start, end = start_and_end(grid, grid_numbers, int(clue_no), "down")
         possible_branches = []
-        if  down_count == 2 or len(cand_list) == 0:
+        if len(cand_list) == 0:
             possible_branches = [ [row[:] for row in current_grid] ]
         for candidate in cand_list:
             inserted = insert_to_grid(current_grid, start, end, candidate)
             if inserted is not None:
+                if empty_tile_number(grid, inserted) == 0:
+                    return [inserted]
                 append_unique(possible_branches, inserted)
         
         for branch in possible_branches:
