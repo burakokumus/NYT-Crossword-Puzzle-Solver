@@ -15,24 +15,23 @@ def stratified_merge(list_a, list_b, list_c):
     lena = len(list_a)
     lenb = len(list_b)
     lenc = len(list_c)
-
     stratified = []
     while len(list_a) > 0 or len(list_b) > 0 or len(list_c) > 0:
-        if len(list_a) > lena // 10:
+        if len(list_a) > lena // 10 and len(list_a) > 10:
             stratified.extend( list_a[:lena // 10])
             list_a = list_a[lena // 10:]
         else:
             stratified.extend(list_a)
             list_a = []
 
-        if len(list_b) > lenb // 10:
+        if len(list_b) > lenb // 10 and len(list_b) > 10:
             stratified.extend( list_b[:lenb // 10])
             list_b = list_b[lenb // 10:]
         else:
             stratified.extend(list_b)
             list_b = []
 
-        if len(list_c) > lenc // 10:
+        if len(list_c) > lenc // 10 and len(list_c) > 10:
             stratified.extend( list_c[:lenc // 10])
             list_c = list_c[lenc // 10:]
         else:
