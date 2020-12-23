@@ -1,0 +1,38 @@
+{
+    "date": "Tuesday, November 17, 2020",
+    "grid": [
+                [1, 1, 0, 0, 0],
+                [1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 1],
+                [0, 0, 0, 1, 1]
+            ],
+    "grid_numbers": [
+                [0, 0, 1, 2, 3],
+                [0, 4, 0, 0, 0],
+                [5, 0, 0, 0, 0],
+                [6, 0, 0, 0, 0],
+                [7, 0, 0, 0, 0]
+            ],
+    "answer": [        
+                [" ", " ", "M", "O", "P"],
+                [" ", "J", "U", "N", "E"],
+                ["B", "I", "D", "E", "N"],
+                ["O", "L", "D", "S", " "],
+                ["D", "I", "E", " ", " "]
+            ],
+    "across": [
+                ["1", "It might go through the wringer"],
+                ["4", "Month for the summer solstice"],
+                ["5", "See 4-Down"],
+                ["6", "Auto pioneer Ransom E. ___"],
+                ["7", "Toilet paper layer"]
+            ],
+    "down": [
+                ["1", "Like dirt roads after rain"],
+                ["2", "Vending machine bills"],
+                ["3", "It's \"mightier than the sword\""],
+                ["4", "With 5-Across, former second lady soon to become first lady"],
+                ["5", "Catch song, in slang"]
+            ]
+}

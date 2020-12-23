@@ -1,0 +1,38 @@
+{
+    "date": "Friday, November 20, 2020",
+    "grid": [
+                [1, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 1]
+            ],
+    "grid_numbers": [
+                [0, 1, 2, 3, 4],
+                [0, 5, 0, 0, 0],
+                [6, 0, 0, 0, 0],
+                [7, 0, 0, 0, 0],
+                [8, 0, 0, 0, 0]
+            ],
+    "answer": [        
+                [" ", "N", "A", "V", "Y"],
+                [" ", "O", "R", "E", "O"],
+                ["G", "O", "I", "N", "G"],
+                ["O", "B", "A", "M", "A"],
+                ["O", "S", "L", "O", " "]
+            ],
+    "across": [
+                ["1", "Dark shade of blue"],
+                ["5", "Cookie that will be sold gluten-free in 2021"],
+                ["6", "\"How It Started vs. How It's __\" (popular meme)"],
+                ["7", "\"A Promised Land\" author"],
+                ["8", "Capital of Norway"]
+            ],
+    "down": [
+                ["1", "Gamer beginners"],
+                ["2", "Default font for a Google Doc"],
+                ["3", "App for paying back friends"],
+                ["4", "Combination o fmeditation and exercise"],
+                ["6", "Liquidy gunk"]
+            ]
+}

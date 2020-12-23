@@ -1,0 +1,38 @@
+{
+    "date": "Monday, November 16, 2020",
+    "grid": [
+                [1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 1]
+            ],
+    "grid_numbers": [
+                [0, 1, 2, 3, 4],
+                [5, 4, 0, 0, 0],
+                [6, 0, 0, 0, 0],
+                [7, 0, 0, 0, 0],
+                [8, 0, 0, 0, 0]
+            ],
+    "answer": [        
+                [" ", "C", "U", "P", "S"],
+                ["H", "A", "N", "O", "I"],
+                ["O", "R", "B", "I", "T"],
+                ["S", "T", "O", "N", "E"],
+                ["T", "E", "X", "T", " "]
+            ],
+    "across": [
+                ["1", "There are 16 in a gallon"],
+                ["5", "Capital of Vietnam"],
+                ["6", "Circle the globe"],
+                ["7", "Material for a monolith"],
+                ["8", "Message from a smartphone"]
+            ],
+    "down": [
+                ["1", "À la ___ (one way to order)"],
+                ["2", "Take out of the packaging"],
+                ["3", "Word after compass, melting or West"],
+                ["4", "Etsy or eBay"],
+                ["5", "Late-night personality"]
+            ]
+}

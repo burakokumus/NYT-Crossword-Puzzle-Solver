@@ -1,0 +1,38 @@
+{
+    "date": "Wednesday, November 18, 2020",
+    "grid": [
+                [1, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 1],
+                [0, 0, 0, 0, 1]
+            ],
+    "grid_numbers": [
+                [0, 1, 2, 3, 4],
+                [0, 5, 0, 0, 0],
+                [6, 0, 0, 0, 0],
+                [7, 0, 0, 0, 0],
+                [8, 0, 0, 0, 0]
+            ],
+    "answer": [        
+                [" ", "S", "I", "L", "O"],
+                [" ", "A", "M", "I", "D"],
+                ["Q", "U", "A", "K", "E"],
+                ["E", "D", "G", "E", " "],
+                ["D", "I", "E", "S", " "]
+            ],
+    "across": [
+                ["1", "Giant grain container"],
+                ["5", "In the heart of"],
+                ["6", "Country rocker?"],
+                ["7", "Slight advantage"],
+                ["8", "Runs out of battery"]
+            ],
+    "down": [
+                ["1", "___ Arabia"],
+                ["2", "Public persona"],
+                ["3", "Reactions to a Facebook post"],
+                ["4", "\"To a...\" poem"],
+                ["6", "Mathematician's letters of proof"]
+            ]
+}

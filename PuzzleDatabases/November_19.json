@@ -1,0 +1,38 @@
+{
+    "date": "Thursday, November 19, 2020",
+    "grid": [
+                [1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 1]
+            ],
+    "grid_numbers": [
+                [0, 1, 2, 3, 4],
+                [5, 0, 0, 0, 0],
+                [6, 0, 0, 0, 0],
+                [7, 0, 0, 0, 0],
+                [8, 0, 0, 0, 0]
+            ],
+    "answer": [        
+                [" ", "P", "R", "O", "M"],
+                ["D", "I", "A", "N", "A"],
+                ["R", "A", "N", "K", "S"],
+                ["A", "N", "D", "E", "S"],
+                ["T", "O", "B", "Y", " "]
+            ],
+    "across": [
+                ["1", "Big event for juniors and seniors"],
+                ["5", "Role for Emma Corrin on season four of \"The Crown\""],
+                ["6", "Corporal, colonel, captain, etc."],
+                ["7", "Home to the ruins of Machu Picchu"],
+                ["8", "Country singer Keith"]
+            ],
+    "down": [
+                ["1", "Instrument with 88 keys"],
+                ["2", "Genre for D'Angelo and Erykah Badu"],
+                ["3", "Perfectly pitched, musically"],
+                ["4", "Around 2x10^30 kd, for our sun"],
+                ["5", "\"Dang it!\""]
+            ]
+}
