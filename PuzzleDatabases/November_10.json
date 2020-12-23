@@ -1,0 +1,38 @@
+{
+  "date": "Tuesday, November 10, 2020",
+  "grid": [
+    [0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0]
+  ],
+  "grid_numbers": [
+    ["1", "2", "3", "4", 0],
+    ["5", 0, 0, 0, 0],
+    ["6", 0, 0, 0, "7"],
+    [0, "8", 0, 0, 0],
+    [0, "9", 0, 0, 0]
+  ],
+  "answer": [
+    ["P", "A", "W", "N", " "],
+    ["O", "H", "I", "O", " "],
+    ["D", "E", "L", "T", "A"],
+    [" ", "A", "C", "I", "D"],
+    [" ", "D", "O", "T", "S"]
+  ],
+  "across": [
+    ["1", "Piece starting on the second or seventh rank, in chess"],
+    ["5", "The \"O\" of B&O Railroad"],
+    ["6", "Where a river meets the sea"],
+    ["8", "LSD, by another name"],
+    ["9", "What Pac-Man eats"]
+  ],
+  "down": [
+    ["1", "Group of close friends and relatives, in 2020-speak"],
+    ["2", "In front"],
+    ["3", "Alt-rock band fronted by Jeff Tweedy"],
+    ["4", "Cry in game of tag"],
+    ["7", "Fast-forwarded parts of podcasts"]
+  ]
+}

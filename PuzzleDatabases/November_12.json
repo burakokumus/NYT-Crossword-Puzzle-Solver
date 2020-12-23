@@ -1,0 +1,39 @@
+{
+  "date": "Thursday, November 12, 2020",
+  "grid": [
+    [1, 1, 0, 0, 0],
+    [1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1],
+    [0, 0, 0, 1, 1]
+  ],
+  "grid_numbers": [
+    [0, 0, 1, 2, 3],
+    [0, 4, 0, 0, 0],
+    [5, 0, 0, 0, 0],
+    [6, 0, 0, 0, 0],
+    [7, 0, 0, 0, 0]
+  ],
+  "answer": [
+    [" ", " ", "C", "R", "O"],
+    [" ", "C", "R", "O", "W"],
+    ["Q", "U", "A", "I", "L"],
+    ["B", "E", "N", "D", " "],
+    ["S", "S", "E", " ", " "]
+  ],
+  "across": [
+    ["1", "___-Magnon"],
+    ["4", "Bird that can remember human faces and solve multi-step puzzles"],
+    ["5", "California _____, bird with a signature head plume"],
+    ["6", "Flex"],
+    ["7", "180° from NNW"
+    ]
+  ],
+  "down": [
+    ["1", "World's tallest flying bird"],
+    ["2", "____ rage (side effect of doping)"],
+    ["3", "Bird that can rotate its head 270°"],
+    ["4", "Prompts for actors"],
+    ["5", "Most Super Bowl M.V.P.s"]
+  ]
+}

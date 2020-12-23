@@ -1,0 +1,38 @@
+{
+  "date": "Monday, November 9, 2020",
+  "grid": [
+    [0, 0, 0, 1, 1],
+    [0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0],
+    [1, 1, 0, 0, 0]
+  ],
+  "grid_numbers": [
+    ["1", "2", "3", 0, 0],
+    ["4", 0, 0, "5", 0],
+    ["6", 0, 0, 0, "7"],
+    [0, "8", 0, 0, 0],
+    [0, 0, "9", 0, 0]
+  ],
+  "answer": [
+    ["T", "A", "B", " ", " "],
+    ["S", "L", "O", "T", " "],
+    ["K", "A", "R", "A", "T"],
+    [" ", "N", "A", "T", "E"],
+    [" ", " ", "T", "A", "N"]
+  ],
+  "across": [
+    ["1", "Browser window"],
+    ["4", "Mailbox opening"],
+    ["6", "Gold measurement unit"],
+    ["8", "Silver of FiveThirtyEight"],
+    ["9", "Bronze at the beach"]
+  ],
+  "down": [
+    ["1", "Reprimanding sound"],
+    ["2", "Zen philosopher Watts"],
+    ["3", "Mockumentary character revived for a 2020 film"],
+    ["5", "British \"Bye, bye!\""],
+    ["7", "Largest of all three-letter numbers"]
+  ]
+}
