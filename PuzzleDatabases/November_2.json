@@ -1,0 +1,38 @@
+{
+    "date": "Monday, November 2, 2020",
+    "grid": [
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0]
+            ],
+    "grid_numbers": [
+                [1, 2, 3, 4, 5],
+                [6, 0, 0, 0, 0],
+                [7, 0, 0, 0, 0],
+                [8, 0, 0, 0, 0],
+                [0, 9, 0, 0, 0]
+            ],
+    "answer": [        
+                ["R", "I", "S", "K", "Y"],
+                ["I", "N", "T", "R", "O"],
+                ["P", "L", "A", "I", "D"],
+                ["E", "A", "G", "L", "E"],
+                [" ", "W", "E", "L", "L"]
+            ],
+    "across": [
+                ["1", "Like cutting your own hair"],
+                ["6", "First paragraph of a five paragraph essay"],
+                ["7", "Flannel shirt pattern"],
+                ["8", "Bird in the Postal Service logo"],
+                ["9", "____ drink, bar offering made with the most inexpensive liquor"]
+            ],
+    "down": [
+                ["1", "Ready to eat"],
+                ["2", "Relative my marriage"],
+                ["3", "Play ground?"],
+                ["4", "Tiny food for the world's largest animal"],
+                ["5", "Sing like a Swiss mountaineer"]
+            ]
+}

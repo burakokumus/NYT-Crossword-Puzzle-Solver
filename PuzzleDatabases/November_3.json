@@ -1,0 +1,38 @@
+{
+    "date": "Tuesday, November 3, 2020",
+    "grid": [
+                [1, 0, 0, 0, 1],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 1]
+            ],
+    "grid_numbers": [
+                [0, 1, 2, 3, 0],
+                [4, 0, 0, 0, 5],
+                [6, 0, 0, 0, 0],
+                [7, 0, 0, 0, 0],
+                [0, 8, 0, 0, 0]
+            ],
+    "answer": [        
+                [" ", "V", "P", "S", " "],
+                ["B", "O", "O", "T", "H"],
+                ["A", "T", "W", "A", "R"],
+                ["D", "E", "E", "T", "S"],
+                [" ", "D", "R", "E", " "]
+            ],
+    "across": [
+                ["1", "#2's on presidential tickets: Abbr."],
+                ["4", "Election day enclosure"],
+                ["6", "Engaged in battle"],
+                ["7", "Specifics, slangily"],
+                ["8", "Beats by ___ (headphones brand)"]
+            ],
+    "down": [
+                ["1", "Did one's civic duty"],
+                ["2", "In _____ (holding office)"],
+                ["3", "Part of the electoral college"],
+                ["4", "Poorly behaved"],
+                ["5", "6 a.m. to 9 p.m., for N.Y. polls"]
+            ]
+}

@@ -1,158 +1,41 @@
 {
-    "date": "Friday, November 6, 2020",
-    "grid": [
-        [
-            0,
-            0,
-            0,
-            0,
-            1
-        ],
-        [
-            0,
-            0,
-            0,
-            0,
-            1
-        ],
-        [
-            0,
-            0,
-            0,
-            0,
-            0
-        ],
-        [
-            1,
-            0,
-            0,
-            0,
-            0
-        ],
-        [
-            1,
-            0,
-            0,
-            0,
-            0
-        ]
-    ],
-    "grid_numbers": [
-        [
-            "1",
-            "2",
-            "3",
-            "4",
-            0
-        ],
-        [
-            "5",
-            0,
-            0,
-            0,
-            0
-        ],
-        [
-            "6",
-            0,
-            0,
-            0,
-            "7"
-        ],
-        [
-            0,
-            "8",
-            0,
-            0,
-            0
-        ],
-        [
-            0,
-            "9",
-            0,
-            0,
-            0
-        ]
-    ],
-    "answer": [
-        [
-            "T",
-            "E",
-            "C",
-            "H",
-            " "
-        ],
-        [
-            "I",
-            "M",
-            "A",
-            "Y",
-            " "
-        ],
-        [
-            "C",
-            "O",
-            "M",
-            "P",
-            "S"
-        ],
-        [
-            " ",
-            "J",
-            "E",
-            "E",
-            "P"
-        ],
-        [
-            " ",
-            "I",
-            "L",
-            "S",
-            "A"
-        ]
-    ],
-    "across": [
-        [
-            "1",
-            "Big ___ (Facebook, Google, etc.)"
-        ],
-        [
-            "5",
-            "Noncommittal response"
-        ],
-        [
-            "6",
-            "Provides for free, as a drink"
-        ],
-        [
-            "8",
-            "Wrangler automaker"
-        ],
-        [
-            "9",
-            "The \"she\" of \"Of all the gin joints in all the towns in all the world, she walks into mine\""
-        ]
-    ],
-    "down": [
-        [
-            "1",
-            "Behavioral quirk"
-        ],
-        [
-            "2",
-            "What people use to put on a happy face?"
-        ],
-        [
-            "3",
-            "Animal with humps"
-        ],
-        [
-            "4",
-            "Really talks (up)"
-        ],
-        [
-            "7",
-            "Vacation relaxation location"
-        ]
+  "date": "Friday, November 6, 2020",
+  "grid": [
+    [0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0]
+  ],
+  "grid_numbers": [
+    ["1", "2", "3", "4", 0],
+    ["5", 0, 0, 0, 0],
+    ["6", 0, 0, 0, "7"],
+    [0, "8", 0, 0, 0],
+    [0, "9", 0, 0, 0]
+  ],
+  "answer": [
+    ["T", "E", "C", "H", " "],
+    ["I", "M", "A", "Y", " "],
+    ["C", "O", "M", "P", "S"],
+    [" ", "J", "E", "E", "P"],
+    [" ", "I", "L", "S", "A"]
+  ],
+  "across": [
+    ["1", "Big ___ (Facebook, Google, etc.)"],
+    ["5", "Noncommittal response"],
+    ["6", "Provides for free, as a drink"],
+    ["8", "Wrangler automaker"],
+    [
+      "9",
+      "The \"she\" of \"Of all the gin joints in all the towns in all the world, she walks into mine\""
     ]
+  ],
+  "down": [
+    ["1", "Behavioral quirk"],
+    ["2", "What people use to put on a happy face?"],
+    ["3", "Animal with humps"],
+    ["4", "Really talks (up)"],
+    ["7", "Vacation relaxation location"]
+  ]
 }
