@@ -48,6 +48,7 @@ def google_query(query, length, api_key, cse_id, **kwargs):
     for a_result in query_results['items']:
         if a_result["displayLink"] not in FORBIDDEN_SITES and "crossword" not in a_result["displayLink"] \
                         and "puzzle" not in a_result["displayLink"] and "solver" not in a_result["displayLink"]:
+             # Process the website...
             snippet = []
             if "snippet" in a_result:
                 snippet = remove_html_tags(a_result["snippet"])
@@ -68,10 +69,6 @@ def google_query(query, length, api_key, cse_id, **kwargs):
     
     next_response = query_service.cse().list(
                                 q=query,cx=cse_id,num=10,start=query_results['queries']['nextPage'][0]['startIndex'],).execute() 
-    print
-    if query == "\"Oh, you wanna go? Let's go!\"":
-        f = open("results.txt", "w")
-        f.write(next_response)
     for a_result in next_response['items']:
         if a_result["displayLink"] not in FORBIDDEN_SITES and "crossword" not in a_result["displayLink"] \
                         and "puzzle" not in a_result["displayLink"] and "solver" not in a_result["displayLink"]:
