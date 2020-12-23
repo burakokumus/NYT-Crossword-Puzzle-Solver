@@ -1,1 +1,38 @@
-{"date": "Thursday, November 5, 2020", "grid": [[1, 1, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 1, 1]], "grid_numbers": [[0, 0, "1", "2", "3"], ["4", "5", 0, 0, 0], ["6", 0, 0, 0, 0], ["7", 0, 0, 0, 0], ["8", 0, 0, 0, 0]], "answer": [[" ", " ", "T", "A", "B"], ["S", "M", "I", "L", "E"], ["K", "A", "P", "P", "A"], ["I", "T", "S", "O", "N"], ["S", "H", "Y", " ", " "]], "across": [["1", "Running total at a bar"], ["4", "Photographer's request"], ["6", "Greek \"K\""], ["7", "\"Oh, you wanna go? Let's go!\""], ["8", "Bashful"]], "down": [["1", "A little drunk"], ["2", "Purina dog food brand"], ["3", "Word after jelly or coffee"], ["4", "Sports equipment with which you can do a \"pizza stop\""], ["5", "Class that has its pluses and minuses"]]}
+{
+  "date": "Thursday, November 5, 2020",
+  "grid": [
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0]
+  ],
+  "grid_numbers": [
+    [1, 2, 3, 4, 5],
+    [6, 0, 0, 0, 0],
+    [7, 0, 0, 0, 0],
+    [8, 0, 0, 0, 0],
+    [9, 0, 0, 0, 0]
+  ],
+  "answer": [
+    ["S", "H", "O", "E", "S"],
+    ["C", "A", "F", "F", "E"],
+    ["A", "T", "A", "L", "L"],
+    ["R", "E", "G", "A", "L"],
+    ["F", "R", "E", "T", "S"]
+  ],
+  "across": [
+    ["1", "Their tongues nearly touch the ground"],
+    ["6", "Espresso or cappuccino, to Italians"],
+    ["7", "Even a tiny bit"],
+    ["8", "America's second-largest movie theater chain, after AMC"],
+    ["9", "Eidges on a guitar"]
+  ],
+  "down": [
+    ["1", "Snowman's neckwear"],
+    ["2", "Constant critic"],
+    ["3", "Old enough"],
+    ["4", "E♭"],
+    ["5", "Lists on Craigslist, e.g."]
+  ]
+}

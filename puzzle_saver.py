@@ -1,5 +1,7 @@
 from puzzle_scraper import PuzzleScraper
 import json
+import time
+from PyQt5.QtCore import QDate, Qt
 
 if __name__ == "__main__":
     
@@ -13,12 +15,12 @@ if __name__ == "__main__":
     ps.close_driver()
 
     data = {}
-    data["date"] = "Thursday, November 5, 2020"
+    data["date"] = QDate.currentDate().toString(Qt.DefaultLocaleLongDate)
     data["grid"] = grid
     data["grid_numbers"] = grid_numbers
     data["answer"] = answer
     data["across"] = across
     data["down"] = down
     print(data["down"][3])
-    with open("./PuzzleDatabases/November_5.json", "w") as outfile:
+    with open("./PuzzleDatabases/December_22.json", "w") as outfile:
         json.dump(data, outfile)

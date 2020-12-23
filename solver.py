@@ -3,6 +3,7 @@ import google_search
 import wikipedia_search
 import word_eliminator
 import datamuse
+from random import randint
 
 '''
 Solve takes information about grid and clues
@@ -25,34 +26,42 @@ def solve(  grid, across, down, grid_numbers, trace_mod=False):
     if trace_mod:
         print("Finding candidate list for across clues")
     across_candidate_lists = find_candidate_lists(across, across_clue_lengths, trace_mod)
-    # across_blacklist = [i for i, clue in enumerate(across) if across[i][1][-1] == "?"]
+
     if trace_mod:
         print("Finding candidate list for down clues")
     down_candidate_lists = find_candidate_lists(down, down_clue_lengths, trace_mod)
-    # down_blacklist = [i for i, clue in enumerate(down) if down[i][1][-1] == "?"]
 
     if trace_mod:
         print("Trying to fit candidates for clues")
     results = rec_insert(grid, grid_numbers, answer, across_candidate_lists, down_candidate_lists, False)
 
+    if len(results) == 0:
+        if trace_mod:
+            print("No answers found. Trying again...")
+        answer = [
+                [' ', ' ', ' ', ' ', ' '],
+                [' ', ' ', ' ', ' ', ' '], 
+                [' ', ' ', ' ', ' ', ' '], 
+                [' ', ' ', ' ', ' ', ' '], 
+                [' ', ' ', ' ', ' ', ' '], 
+        ]
+        results = rec_insert(grid, grid_numbers, answer, across_candidate_lists, down_candidate_lists, False)
+        
     if trace_mod:
         print("Finding answers with least empty cells")
+
     min_empty = empty_tile_number(grid, answer)
+
     for result in results:
         min_current = empty_tile_number(grid, result)
         if min_current < min_empty:
             min_empty = min_current
-    count = 0
+
     best_results = []
     for result in results:
         if empty_tile_number(grid, result) == min_empty:
             best_results.append(result)
-            count += 1
-            if trace_mod:
-                print("This is an alternative best result")
-                for row in result:
-                    print(row)
-                print("------")
+            break
     if trace_mod:
         print("Answer found. Reporting...")
     if len(best_results) == 0:
@@ -134,7 +143,8 @@ def rec_insert(grid, grid_numbers, current_grid, acro_cand_list, down_cand_list,
 
     possible_outcomes = []
     if add_across:
-        next_across_tup = acro_cand_list[0]
+        rand_no = randint(0, across_count - 1)
+        next_across_tup = acro_cand_list[rand_no]
         clue_no = next_across_tup[0]
         cand_list = next_across_tup[1]
         start, end = start_and_end(grid, grid_numbers, int(clue_no), "across")
@@ -144,28 +154,33 @@ def rec_insert(grid, grid_numbers, current_grid, acro_cand_list, down_cand_list,
         for candidate in cand_list:
             inserted = insert_to_grid(current_grid, start, end, candidate)
             if inserted is not None:
+                if empty_tile_number(grid, inserted) == 0:
+                    return [inserted]
                 append_unique(possible_branches, inserted)
         
         for branch in possible_branches:
-            outcomes = rec_insert(grid, grid_numbers, branch, acro_cand_list[1:], down_cand_list, not turn)
+            outcomes = rec_insert(grid, grid_numbers, branch, [x for x in acro_cand_list if x != next_across_tup], down_cand_list, not turn)
             for outcome in outcomes:
                 append_unique(possible_outcomes, outcome)
 
     elif add_down:
-        next_down_tup = down_cand_list[0]
+        rand_no = randint(0, down_count - 1)
+        next_down_tup = down_cand_list[rand_no]
         clue_no = next_down_tup[0]
         cand_list = next_down_tup[1]
         start, end = start_and_end(grid, grid_numbers, int(clue_no), "down")
         possible_branches = []
-        if  down_count == 2 or len(cand_list) == 0:
+        if len(cand_list) == 0:
             possible_branches = [ [row[:] for row in current_grid] ]
         for candidate in cand_list:
             inserted = insert_to_grid(current_grid, start, end, candidate)
             if inserted is not None:
+                if empty_tile_number(grid, inserted) == 0:
+                    return [inserted]
                 append_unique(possible_branches, inserted)
         
         for branch in possible_branches:
-            outcomes = rec_insert(grid, grid_numbers, branch, acro_cand_list, down_cand_list[1:], not turn)
+            outcomes = rec_insert(grid, grid_numbers, branch, acro_cand_list, [x for x in down_cand_list if x != next_down_tup], not turn)
             for outcome in outcomes:
                 append_unique(possible_outcomes, outcome)
 
