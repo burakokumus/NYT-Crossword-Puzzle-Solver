@@ -90,9 +90,11 @@ def find_candidates(clue, length, trace_mod=False):
     if trace_mod:
         print("Finding possible candidates for the clue", clue)
     # search clue
+    # clue = word_eliminator.remove_escape_sequences(clue)
     filtered_clue = word_eliminator.remove_escape_sequences(clue)
     filtered_clue = word_eliminator.eliminate_punctuation(filtered_clue.split(" "))
     filtered_clue = ' '.join(filtered_clue)
+    filtered_clue = filtered_clue[:-1]
     if trace_mod:
         print("Searching google")
     google_results = google_search.search_google(filtered_clue, length)
@@ -105,7 +107,7 @@ def find_candidates(clue, length, trace_mod=False):
         wikipedia_results = wikipedia_results[:100]
     if trace_mod:
         print("Searching wordnet")
-    datamuse_results = datamuse.get_words_with_similar_meaning(clue, length)
+    datamuse_results = datamuse.get_words_with_similar_meaning(filtered_clue, length)
     candidates_list = word_eliminator.stratified_merge(datamuse_results, google_results, wikipedia_results)
     candidates_list = word_eliminator.eliminate_duplicates(candidates_list)
     return candidates_list
@@ -143,44 +145,49 @@ def rec_insert(grid, grid_numbers, current_grid, acro_cand_list, down_cand_list,
 
     possible_outcomes = []
     if add_across:
-        rand_no = randint(0, across_count - 1)
-        next_across_tup = acro_cand_list[rand_no]
+        # rand_no = randint(0, across_count - 1)
+        # next_across_tup = acro_cand_list[rand_no]
+        next_across_tup = acro_cand_list[0]
         clue_no = next_across_tup[0]
         cand_list = next_across_tup[1]
         start, end = start_and_end(grid, grid_numbers, int(clue_no), "across")
         possible_branches = []
-        if  len(cand_list) == 0:
+        if  across_count == 1 or len(cand_list) == 0:
             possible_branches = [ [row[:] for row in current_grid]]
         for candidate in cand_list:
             inserted = insert_to_grid(current_grid, start, end, candidate)
             if inserted is not None:
-                if empty_tile_number(grid, inserted) == 0:
-                    return [inserted]
+                # if empty_tile_number(grid, inserted) == 0:
+                #     return [inserted]
                 append_unique(possible_branches, inserted)
         
         for branch in possible_branches:
-            outcomes = rec_insert(grid, grid_numbers, branch, [x for x in acro_cand_list if x != next_across_tup], down_cand_list, not turn)
+            # outcomes = rec_insert(grid, grid_numbers, branch, [x for x in acro_cand_list if x != next_across_tup], down_cand_list, not turn)
+            outcomes = rec_insert(grid, grid_numbers, branch, acro_cand_list[1:], down_cand_list, not turn)
+            
             for outcome in outcomes:
                 append_unique(possible_outcomes, outcome)
 
     elif add_down:
-        rand_no = randint(0, down_count - 1)
-        next_down_tup = down_cand_list[rand_no]
+        # rand_no = randint(0, down_count - 1)
+        # next_down_tup = down_cand_list[rand_no]
+        next_down_tup = down_cand_list[0]
         clue_no = next_down_tup[0]
         cand_list = next_down_tup[1]
         start, end = start_and_end(grid, grid_numbers, int(clue_no), "down")
         possible_branches = []
-        if len(cand_list) == 0:
+        if down_count == 1 or len(cand_list) == 0:
             possible_branches = [ [row[:] for row in current_grid] ]
         for candidate in cand_list:
             inserted = insert_to_grid(current_grid, start, end, candidate)
             if inserted is not None:
-                if empty_tile_number(grid, inserted) == 0:
-                    return [inserted]
+                # if empty_tile_number(grid, inserted) == 0:
+                #     return [inserted]
                 append_unique(possible_branches, inserted)
         
         for branch in possible_branches:
-            outcomes = rec_insert(grid, grid_numbers, branch, acro_cand_list, [x for x in down_cand_list if x != next_down_tup], not turn)
+            # outcomes = rec_insert(grid, grid_numbers, branch, acro_cand_list, [x for x in down_cand_list if x != next_down_tup], not turn)
+            outcomes = rec_insert(grid, grid_numbers, branch, acro_cand_list, down_cand_list[1:], not turn)
             for outcome in outcomes:
                 append_unique(possible_outcomes, outcome)
 

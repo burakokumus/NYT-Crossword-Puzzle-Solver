@@ -67,10 +67,11 @@ def to_upper_case(word_list):
 def remove_escape_sequences(input_str):
     query = input_str.split(" ")
     words_without_escape = ""
+    is_single_word = len(query) == 1
     for word in query:
         filtered = filter(str.isalpha, word)
         words_without_escape += "".join(filtered) + " "
-    return words_without_escape
+    return words_without_escape[:-1] if not is_single_word else words_without_escape
 
 def filter_words(word_list, word_length):
     words_without_escape = []
